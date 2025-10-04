@@ -12,34 +12,61 @@ draft: false
 
 ### 前言
 
+Fuwari 是一个轻量的静态博客框架，而 Giscus 则是基于 GitHub Discussions 的评论系统。将两者结合，可以为你的博客添加一个简洁、无需数据库的评论功能。下面是一份完整的集成指南，亲测两次成功（别问），照着做基本不会踩坑。
+
+---
 ### 一、准备工作
 
-- 已经部署好的 Fuwari，还没部署可以先去看我的[这篇文章](https://nimeblogs.netlify.app/posts/building_blogs/)
-- 一个较好的心态，但我是一次成功的，所以不是很必要吧
+- 已部署好的 Fuwari 博客（若未部署，可参考这篇：[搭建博客指南](https://nimeblogs.github.io/posts/building_blogs/)）
+- 一个 GitHub 账号（当然）
+- 一点点耐心（其实不需要太多）
 
-### 二、为 Giscus 进入 Fuwari 做好准备
+---
 
-1. 在 Github 中，新建一个仓库，命名随意，如 `fuwari-comments`，**但一定要 `public`**!
+### 二、配置 Giscus 评论系统
 
-2. 打开 `setting`，在 `General` 一栏的 `Feature` 中，勾选 `Discussions`。
+1. 创建 GitHub 仓库
+	- 新建一个 公开仓库，例如命名为 `fuwari-comments`
+	- 进入仓库设置 → General → Features，勾选 Discussions
 
-3. 安装 [Giscus Apps](https://github.com/apps/giscus)。
+2. 安装 Giscus
 
-4. 打开 [Giscus](https://giscus.app/zh-CN)。
+	- 访问 [Giscus GitHub App](https://github.com/apps/giscus)，点击安装
+	
+	![图炸了私信作者](https://s21.ax1x.com/2025/10/04/pVTjbgx.png)
+	
+	- 授权访问你刚创建的仓库
+	
+	![图炸了私信作者](https://s21.ax1x.com/2025/10/04/pVTjXDO.png)
 
-	- `语言` 默认。
-	- `仓库` 填你新建的仓库，注意是否所有的条件均满足。
-	- `页面 ↔️ discussion 映射关系` 默认即可。
-	- `Discussion 分类` 选择 `Announcements`。
-	- `特性` 可多勾选上 `将评论框放在评论上方`。
+3. 获取配置参数
 
-5. 记下 仓库ID `data-repo-id` 和 分类ID `data-category-id`，等会要用。
+	打开 [Giscus 官网](https://giscus.app/zh-CN)，按如下设置：
+	- 语言:  默认（zh-CN）
+	- 仓库: 你刚创建的仓库
+	
+	![](https://s21.ax1x.com/2025/10/04/pVTjH81.png)
+	
+	- 页面 ↔️ Discussion 映射：默认（pathname）	
+	- Discussion 分类：Announcements	
+	![](https://s21.ax1x.com/2025/10/04/pVTjOKK.png)
+	- 特性（可选）：将评论框放在上方	
+	完成后，记下以下两个值：
+		- `data-repo-id`（仓库 ID）
+		- `data-category-id`（分类 ID）
 
-### 三、喜迎 Giscus 入~~藏~~本地
+---
+### 三、将 Giscus 集成到 Fuwari
 
-1. 打开 Fuwari 的本地根目录。
+1. 创建组件文件
 
-2. 打开 `src/components/misc`，新建 `Giscus.astro` 文件，内容如下：
+- 在 Fuwari 项目根目录下，新建文件：
+
+```
+src/components/misc/Giscus.astro
+```
+
+- 内容如下（已适配主题切换）：
 
 ```diff lang="astro"
 ---
@@ -139,9 +166,15 @@ const {
 </script>
 ```
 
-4. 保存。
+2. 在文章页面引入组件
 
-5. 打开 `src/pages/posts/[...slug].astro`，加入如下内容：
+打开文件：
+
+```
+src/pages/posts/[...slug].astro
+```
+
+引入组件：
 
 ```diff lang="astro"
 <!-- 开头 -->
@@ -174,12 +207,28 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 
 （上面给了附近的代码，可以自行定位）
 
-6. 重新推送（可以先预览一下）
+---
+### 四、部署更新
+
+完成上述步骤后，提交代码：
 
 ```bash
 git add .
-git commit -m "更新"
+git commit -m "集成 Giscus 评论系统"
 git push
 ```
+
+等待部署完成后，访问任意文章页面，即可看到评论框。
+
+---
+
+### ✅ 完成！
+
+你现在拥有了一个基于 GitHub Discussions 的评论系统，无需数据库、无需登录验证，评论内容直接托管在 GitHub 上，简洁高效。
+
+如需进一步美化样式或添加功能，可继续探索 Giscus 提供的配置项。
+
+---
+
 
 $\color{#3A3}{\large{finish}}$

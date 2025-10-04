@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/posts/draft.md",
+                "file": "src/content/posts/use_giscus.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "draft"
+              "title": "use_giscus"
             }
           }
         ]
@@ -170,12 +170,12 @@
   },
   "active": "339ce0d8c806bbd8",
   "lastOpenFiles": [
+    "src/content/posts/draft.md",
     "src/content/posts/expressive-code.md",
     "src/content/posts/markdown.md",
     "src/content/posts/markdown-extended.md",
     "src/content/posts/video.md",
     "src/content/posts/use_giscus.md",
-    "src/content/posts/draft.md",
     "src/content/posts/building_Blogs/index.md",
     "src/content/posts/guide/index.md",
     "src/content/posts/building_Blogs.md.md",
