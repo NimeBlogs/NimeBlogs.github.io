@@ -4,7 +4,6 @@ published: 2024-04-15
 description: This is an example of a featured article that will appear in the carousel on the homepage.
 # image: /placeholder.jpg
 tags:
-  - Featured
   - Example
   - Blogging
 category: Examples
