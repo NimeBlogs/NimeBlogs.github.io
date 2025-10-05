@@ -44,4 +44,6 @@ export const en: Translation = {
 	[Key.previous]: "Previous",
 	[Key.next]: "Next",
 	[Key.addFeaturedTag]: "Add 'Featured' tag to posts to display them here",
+	[Key.like]: "Like",
+	[Key.likesCount]: "likes",
 };

@@ -1,0 +1,398 @@
+/* Enhanced Animations for Fuwari Blog */
+
+/* 全局平滑过渡 */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 悬停缩放效果增强 */
+.scale-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scale-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* 深度感阴影效果 */
+.depth-shadow {
+  position: relative;
+}
+
+.depth-shadow::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  filter: blur(4px);
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.depth-shadow:hover::after {
+  bottom: -12px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* 按钮交互效果增强 */
+.btn-enhanced {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
+}
+
+.btn-enhanced:hover::before {
+  left: 100%;
+}
+
+/* 文字渐入效果 */
+.text-reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: textReveal 0.6s ease forwards;
+}
+
+@keyframes textReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 加载脉冲动画 */
+.pulse-loading {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* 波浪背景效果 */
+.wavy-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.wavy-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--card-bg) 0%, var(--btn-plain-bg-hover) 50%, var(--card-bg) 100%);
+  background-size: 50% 100%;
+  animation: wave 15s linear infinite;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* 彩色边框效果 */
+.gradient-border {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background-clip: padding-box;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(45deg, var(--primary), var(--admonitions-color-note), var(--admonitions-color-tip), var(--primary));
+  background-size: 200% 200%;
+  animation: gradientBorder 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes gradientBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 悬浮元素摇摆动画 */
+.float-swing {
+  animation: floatSwing 3s ease-in-out infinite;
+}
+
+@keyframes floatSwing {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* 进度条动画 */
+.progress-animate {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-animate::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: progressFlow 2s infinite;
+}
+
+@keyframes progressFlow {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 微交互 - 点击涟漪效果 */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.ripple-effect:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(100, 100);
+    opacity: 0;
+  }
+}
+
+/* 卡片悬停效果增强 */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* 平滑滚动到顶部 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 滚动时导航栏样式变化 */
+.navbar-scroll {
+  transition: all 0.3s ease;
+}
+
+.navbar-scroll.scrolled {
+  background-color: rgba(var(--card-bg), 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 图像悬停效果 */
+.image-hover {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.image-hover img {
+  transition: all 0.5s ease;
+}
+
+.image-hover:hover img {
+  transform: scale(1.05);
+}
+
+/* 标签悬停效果 */
+.tag-hover {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+}
+
+.tag-hover:hover {
+  transform: translateY(-2px);
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .tag-hover:hover {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* 链接悬停效果 */
+.link-hover {
+  transition: all 0.3s ease !important;
+}
+
+.link-hover:hover {
+  background-color: var(--btn-plain-bg-hover) !important;
+}
+
+/* 个人资料卡片动画 */
+.profile-card {
+  transition: all 0.5s ease !important;
+}
+
+.profile-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.dark .profile-card:hover {
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
+}
+
+/* 侧边栏组件动画 */
+#sidebar-sticky {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 底部区域动画 */
+.footer-transition {
+  transition: all 0.5s ease !important;
+}
+
+/* Widget标题样式增强 */
+widget-layout > div:first-child {
+  transition: all 0.3s ease !important;
+}
+
+widget-layout:hover > div:first-child {
+  color: var(--primary);
+}
+
+/* 徽章悬停效果 */
+.badge-hover {
+  transition: all 0.3s ease !important;
+}
+
+.badge-hover:hover {
+  transform: scale(1.05);
+}
+
+/* 图标按钮悬停效果增强 */
+.btn-regular {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-regular:hover {
+  transform: translateY(-1px);
+}
+
+/* 时间线动画 */
+.timeline-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 代码块增强效果 */
+.code-block-enhanced {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.code-block-enhanced:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.code-block-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary), var(--admonitions-color-note));
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .scale-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-3px);
+  }
+}

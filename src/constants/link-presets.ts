@@ -16,19 +16,19 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/archive/",
 	},
 	[LinkPreset.Friends]: {
-     	name: i18n(I18nKey.friends),
-     	url: '/friends/',
-   },
+		name: i18n(I18nKey.friends),
+		url: "/friends/",
+	},
 	[LinkPreset.Message]: {
-     	name: i18n(I18nKey.message),
-     	url: '/message/',
-   },
+		name: i18n(I18nKey.message),
+		url: "/message/",
+	},
 	[LinkPreset.List]: {
-     	name: i18n(I18nKey.list),
-     	url: '/list/',
-   },
+		name: i18n(I18nKey.list),
+		url: "/list/",
+	},
 	[LinkPreset.Horoscope]: {
-     	name: i18n(I18nKey.horoscope),
-     	url: '/horoscope/',
-   },
+		name: i18n(I18nKey.horoscope),
+		url: "/horoscope/",
+	},
 };

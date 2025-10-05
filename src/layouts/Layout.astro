@@ -4,6 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import ParticleBackground from "@components/ParticleBackground.svelte";
 import ReadingProgress from "@components/ReadingProgress.svelte";
 import { profileConfig, siteConfig } from "@/config";
 import {
@@ -154,6 +155,8 @@ const bannerOffset =
 	>
 		<!-- 阅读进度指示器 -->
 		<ReadingProgress client:only="svelte" />
+		<!-- 背景动态粒子线条 -->
+		<ParticleBackground client:only="svelte" />
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
 
@@ -463,27 +466,17 @@ let navbar = document.getElementById('navbar-wrapper')
 function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
 
-	if (backToTopBtn) {
-		// 当页面滚动超过300px时显示返回顶部按钮
-		if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-			backToTopBtn.classList.remove('hide')
-		} else {
-			backToTopBtn.classList.add('hide')
-		}
-	}
-
-	if (bannerEnabled && toc) {
-		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
-			toc.classList.remove('toc-hide')
-		} else {
-			toc.classList.add('toc-hide')
-		}
-	}
-
-	if (!bannerEnabled) return
+	// 导航栏滚动效果
 	if (navbar) {
+		// 添加滚动时的导航栏样式
+		if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+			navbar.classList.add('scrolled')
+		} else {
+			navbar.classList.remove('scrolled')
+		}
+		
 		const NAVBAR_HEIGHT = 72
-		const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16			// The height the main panel overlaps the banner
+		const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16		// The height the main panel overlaps the banner
 
 		let bannerHeight = BANNER_HEIGHT
 		if (document.body.classList.contains('lg:is-home') && window.innerWidth >= 1024) {
@@ -496,6 +489,36 @@ function scrollFunction() {
 			navbar.classList.remove('navbar-hidden')
 		}
 	}
+
+	// 返回顶部按钮
+	if (backToTopBtn) {
+		if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+			backToTopBtn.classList.remove('hide')
+			backToTopBtn.classList.add('scale-hover')
+		} else {
+			backToTopBtn.classList.add('hide')
+			backToTopBtn.classList.remove('scale-hover')
+		}
+	}
+
+	// 目录显示/隐藏
+	if (bannerEnabled && toc) {
+		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
+			toc.classList.remove('toc-hide')
+		} else {
+			toc.classList.add('toc-hide')
+		}
+	}
+
+	// 检测元素是否在视口中，并添加显示动画
+	const revealElements = document.querySelectorAll('.timeline-item, .text-reveal')
+	revealElements.forEach(element => {
+		const elementTop = element.getBoundingClientRect().top
+		const elementVisible = 150
+		if (elementTop < window.innerHeight - elementVisible) {
+			element.classList.add('visible')
+		}
+	})
 }
 window.onscroll = scrollFunction
 
@@ -511,6 +534,7 @@ window.onresize = () => {
 <script>
 import PhotoSwipeLightbox from "photoswipe/lightbox"
 import "photoswipe/style.css"
+import '../styles/enhanced-animations.css'
 
 let lightbox: PhotoSwipeLightbox
 let pswp = import("photoswipe")

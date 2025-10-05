@@ -9,6 +9,11 @@ import { Icon } from "astro-icon/components";
       今日运势
     </h3>
     
+    <div class="loading-indicator" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+      <div class="text-gray-500 dark:text-gray-400 animate-pulse">正在加载今日运势...</div>
+    </div>
+
+    <div class="horoscope-content" style="display: none;">
     <script>
       // 计算今日星座运势（基于日期的简单算法）
       const today = new Date();
@@ -143,97 +148,196 @@ import { Icon } from "astro-icon/components";
       ];
       const loveDescription = loveDescriptions[loveScore - 1];
       
-      // 页面加载后执行
-      document.addEventListener('DOMContentLoaded', function() {
-        // 渲染总运势星星
-        const starsContainer = document.querySelector('.stars-container');
-        if (starsContainer) {
-          starsContainer.innerHTML = '';
-          for (let i = 0; i < starRating; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="18" class="text-yellow-400 fill-yellow-400" />';
-            starsContainer.appendChild(star);
+      // 加载完成后的处理函数 - 增强版本
+      function handleLoadComplete() {
+        console.log('执行handleLoadComplete，尝试显示内容', new Date().toISOString());
+        
+        // 显示内容，隐藏加载指示器
+        const content = document.querySelector('.horoscope-content');
+        const loading = document.querySelector('.loading-indicator');
+        
+        // 即使只找到其中一个元素，也要尝试操作
+        if (content) {
+          content.style.display = 'block';
+        }
+        
+        if (loading) {
+          loading.style.display = 'none';
+        }
+        
+        // 添加额外的保障：如果主要容器存在但内容为空，显示一些基本信息
+        const container = document.querySelector('.horoscope-container');
+        if (container && content && content.textContent.trim() === '') {
+          console.log('内容为空，显示基本替代信息');
+          
+          // 创建一个简单的替代内容
+          const fallbackContent = document.createElement('div');
+          fallbackContent.className = 'text-center p-4 text-sm text-gray-600 dark:text-gray-400';
+          fallbackContent.innerHTML = `
+            <div class="text-lg font-semibold mb-2">今日运势</div>
+            <div class="flex justify-center mb-4">
+              <span class="inline-block w-3 h-3 rounded-full bg-yellow-400 mx-0.5"></span>
+              <span class="inline-block w-3 h-3 rounded-full bg-yellow-400 mx-0.5"></span>
+              <span class="inline-block w-3 h-3 rounded-full bg-yellow-400 mx-0.5"></span>
+              <span class="inline-block w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 mx-0.5"></span>
+              <span class="inline-block w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 mx-0.5"></span>
+            </div>
+            <p>保持积极心态，今天会是美好的一天！</p>
+            <p class="mt-3 text-xs">${new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          `;
+          
+          // 只在内容为空时添加，避免覆盖已有内容
+          if (content.children.length === 0) {
+            content.appendChild(fallbackContent);
           }
-          for (let i = 0; i < emptyStars; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="18" class="text-gray-300 dark:text-gray-600" />';
-            starsContainer.appendChild(star);
+        }
+      }
+
+      // 重试计数器和最大重试次数
+      let retryCount = 0;
+      const maxRetries = 3;
+
+      // 页面加载后执行，增加错误处理和重试机制
+    function renderHoroscope() {
+      // 立即调用handleLoadComplete，确保即使在渲染过程中出错，也能显示内容
+      // 这是防止一直显示"正在加载"的最保险措施
+      setTimeout(handleLoadComplete, 1500);
+      
+      try {
+        console.log('开始渲染运势组件', new Date().toISOString());
+        
+        // 初始检查：确保必要的DOM元素存在
+        const requiredElements = [
+          '.horoscope-content',
+          '.loading-indicator'
+        ];
+        
+        let missingElements = [];
+        for (const selector of requiredElements) {
+          if (!document.querySelector(selector)) {
+            missingElements.push(selector);
           }
         }
         
-        // 渲染财运星星
-        const wealthStarsContainer = document.querySelector('.wealth-stars-container');
-        if (wealthStarsContainer) {
-          wealthStarsContainer.innerHTML = '';
-          for (let i = 0; i < wealthStarRating; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
-            wealthStarsContainer.appendChild(star);
-          }
-          for (let i = 0; i < wealthEmptyStars; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
-            wealthStarsContainer.appendChild(star);
-          }
+        if (missingElements.length > 0) {
+          console.warn('缺少必要的DOM元素:', missingElements);
+          // 立即显示内容，即使缺少某些元素
+          handleLoadComplete();
+          return;
         }
         
-        // 渲染事业星星
-        const careerStarsContainer = document.querySelector('.career-stars-container');
-        if (careerStarsContainer) {
-          careerStarsContainer.innerHTML = '';
-          for (let i = 0; i < careerStarRating; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
-            careerStarsContainer.appendChild(star);
+        // 创建星星图标的辅助函数
+          function createStarElement(filled = true, size = 14) {
+            const starSpan = document.createElement('span');
+            starSpan.className = 'inline-block mr-0.5';
+            
+            try {
+              // 正确的图标元素创建方式 - 使用span和文本字符替代自定义元素
+              const starIcon = document.createElement('span');
+              starIcon.textContent = '★'; // 使用Unicode星形字符
+              starIcon.style.fontSize = size + 'px';
+              starIcon.className = filled 
+                ? 'text-yellow-400 fill-yellow-400' 
+                : 'text-gray-300 dark:text-gray-600';
+              starSpan.appendChild(starIcon);
+            } catch (e) {
+              // 最简单的后备方案
+              const starText = document.createTextNode(filled ? '●' : '○');
+              starSpan.appendChild(starText);
+              starSpan.style.fontSize = size + 'px';
+              starSpan.className = filled 
+                ? 'text-yellow-400 fill-yellow-400 inline-block mr-0.5' 
+                : 'text-gray-300 dark:text-gray-600 inline-block mr-0.5';
+            }
+            
+            return starSpan;
           }
-          for (let i = 0; i < careerEmptyStars; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
-            careerStarsContainer.appendChild(star);
+          
+          // 渲染总运势星星
+          const starsContainer = document.querySelector('.stars-container');
+          if (starsContainer) {
+            starsContainer.innerHTML = '';
+            try {
+              for (let i = 0; i < starRating; i++) {
+                starsContainer.appendChild(createStarElement(true, 18));
+              }
+              for (let i = 0; i < emptyStars; i++) {
+                starsContainer.appendChild(createStarElement(false, 18));
+              }
+            } catch (e) {
+              // 如果创建图标元素失败，使用文本替代
+              starsContainer.textContent = `${starRating}星`;
+              console.warn('渲染星星图标失败，使用文本替代:', e);
+            }
           }
-        }
-        
-        // 渲染健康星星
-        const healthStarsContainer = document.querySelector('.health-stars-container');
-        if (healthStarsContainer) {
-          healthStarsContainer.innerHTML = '';
-          for (let i = 0; i < healthStarRating; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
-            healthStarsContainer.appendChild(star);
+          
+          // 渲染财运星星
+          const wealthStarsContainer = document.querySelector('.wealth-stars-container');
+          if (wealthStarsContainer) {
+            wealthStarsContainer.innerHTML = '';
+            try {
+              for (let i = 0; i < wealthStarRating; i++) {
+                wealthStarsContainer.appendChild(createStarElement(true, 14));
+              }
+              for (let i = 0; i < wealthEmptyStars; i++) {
+                wealthStarsContainer.appendChild(createStarElement(false, 14));
+              }
+            } catch (e) {
+              wealthStarsContainer.textContent = `${wealthStarRating}星`;
+              console.warn('渲染财运星星失败，使用文本替代:', e);
+            }
           }
-          for (let i = 0; i < healthEmptyStars; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
-            healthStarsContainer.appendChild(star);
+          
+          // 渲染事业星星
+          const careerStarsContainer = document.querySelector('.career-stars-container');
+          if (careerStarsContainer) {
+            careerStarsContainer.innerHTML = '';
+            try {
+              for (let i = 0; i < careerStarRating; i++) {
+                careerStarsContainer.appendChild(createStarElement(true, 14));
+              }
+              for (let i = 0; i < careerEmptyStars; i++) {
+                careerStarsContainer.appendChild(createStarElement(false, 14));
+              }
+            } catch (e) {
+              careerStarsContainer.textContent = `${careerStarRating}星`;
+              console.warn('渲染事业星星失败，使用文本替代:', e);
+            }
           }
-        }
-        
-        // 渲染感情运星星
-        const loveStarsContainer = document.querySelector('.love-stars-container');
-        if (loveStarsContainer) {
-          loveStarsContainer.innerHTML = '';
-          for (let i = 0; i < loveStarRating; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
-            loveStarsContainer.appendChild(star);
+          
+          // 渲染健康星星
+          const healthStarsContainer = document.querySelector('.health-stars-container');
+          if (healthStarsContainer) {
+            healthStarsContainer.innerHTML = '';
+            try {
+              for (let i = 0; i < healthStarRating; i++) {
+                healthStarsContainer.appendChild(createStarElement(true, 14));
+              }
+              for (let i = 0; i < healthEmptyStars; i++) {
+                healthStarsContainer.appendChild(createStarElement(false, 14));
+              }
+            } catch (e) {
+              healthStarsContainer.textContent = `${healthStarRating}星`;
+              console.warn('渲染健康星星失败，使用文本替代:', e);
+            }
           }
-          for (let i = 0; i < loveEmptyStars; i++) {
-            const star = document.createElement('span');
-            star.className = 'inline-block mr-0.5';
-            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
-            loveStarsContainer.appendChild(star);
+          
+          // 渲染感情运星星
+          const loveStarsContainer = document.querySelector('.love-stars-container');
+          if (loveStarsContainer) {
+            loveStarsContainer.innerHTML = '';
+            try {
+              for (let i = 0; i < loveStarRating; i++) {
+                loveStarsContainer.appendChild(createStarElement(true, 14));
+              }
+              for (let i = 0; i < loveEmptyStars; i++) {
+                loveStarsContainer.appendChild(createStarElement(false, 14));
+              }
+            } catch (e) {
+              loveStarsContainer.textContent = `${loveStarRating}星`;
+              console.warn('渲染感情运星星失败，使用文本替代:', e);
+            }
           }
-        }
         
         // 设置其他内容
         if (document.querySelector('.luck-score')) {
@@ -285,7 +389,100 @@ import { Icon } from "astro-icon/components";
         if (document.querySelector('.love-description')) {
           document.querySelector('.love-description').textContent = loveDescription;
         }
-      });
+        // 加载完成
+        handleLoadComplete();
+      } catch (error) {
+        console.error('渲染运势组件时出错:', error);
+        
+        retryCount++;
+        
+        // 显示错误信息和重试选项
+        const container = document.querySelector('.horoscope-container');
+        if (container) {
+          // 先移除已有的错误信息
+          const existingError = container.querySelector('.horoscope-error');
+          if (existingError) {
+            existingError.remove();
+          }
+          
+          const errorMessage = document.createElement('div');
+          errorMessage.className = 'horoscope-error mt-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-sm';
+          
+          if (retryCount <= maxRetries) {
+            errorMessage.innerHTML = `运势加载遇到问题，正在尝试第 ${retryCount}/${maxRetries} 次重试...`;
+          } else {
+            errorMessage.innerHTML = `
+              <div>运势加载遇到问题，已尝试多次重试</div>
+              <button id="retry-horoscope" class="mt-2 px-3 py-1 bg-red-100 dark:bg-red-800/50 rounded hover:bg-red-200 dark:hover:bg-red-700/50 transition-colors text-xs">
+                点击重试
+              </button>
+              <div class="mt-2 text-xs text-red-500 dark:text-red-300">
+                或稍后刷新页面再试
+              </div>
+            `;
+            
+            // 添加手动重试事件监听
+            setTimeout(() => {
+              const retryButton = document.getElementById('retry-horoscope');
+              if (retryButton) {
+                retryButton.addEventListener('click', () => {
+                  retryCount = 0;
+                  renderHoroscope();
+                });
+              }
+            }, 100);
+          }
+          
+          container.appendChild(errorMessage);
+        }
+        
+        // 自动重试，但不超过最大重试次数
+        if (retryCount <= maxRetries) {
+          // 3秒后重试
+          setTimeout(() => {
+            const errorEl = document.querySelector('.horoscope-error');
+            if (errorEl && errorEl.parentNode) {
+              errorEl.parentNode.removeChild(errorEl);
+            }
+            renderHoroscope();
+          }, 3000);
+        } else {
+          // 多次重试失败后，直接显示基本内容
+          handleLoadComplete();
+        }
+        
+        return;
+      }
+    }
+
+    // 页面加载后执行 - 简化版本
+    function loadHoroscope() {
+      // 添加日志帮助调试
+      console.log('尝试加载运势组件', new Date().toISOString());
+      
+      // 直接调用渲染函数，确保执行
+      setTimeout(renderHoroscope, 100);
+    }
+    
+    // 主加载机制
+    document.addEventListener('DOMContentLoaded', loadHoroscope);
+    
+    // 备用加载机制1：立即检查，如果DOM已经加载完成
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(loadHoroscope, 100);
+    }
+    
+    // 备用加载机制2：监听load事件
+    window.addEventListener('load', function() {
+      setTimeout(loadHoroscope, 300); // 给更多时间确保所有资源加载完毕
+    });
+    
+    // 备用加载机制3：添加一个定时器作为最后的保障
+    setTimeout(function() {
+      // 无论如何都强制尝试加载
+      console.log('强制尝试加载运势组件（备用机制）', new Date().toISOString());
+      loadHoroscope();
+    }, 5000); // 5秒后强制检查
     </script>
     
     <div class="mb-4">
@@ -407,6 +604,7 @@ import { Icon } from "astro-icon/components";
           查看详细运势 <Icon name="material-symbols:chevron-right-rounded" size={16} class="inline ml-1" />
         </a>
       </div>
+    </div>
     </div>
   </div>
 </div>
