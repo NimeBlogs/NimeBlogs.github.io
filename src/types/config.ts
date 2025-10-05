@@ -89,6 +89,7 @@ export type BlogPostData = {
 	body: string;
 	title: string;
 	published: Date;
+	publishAt?: Date; // 定时发布时间
 	description: string;
 	tags: string[];
 	draft?: boolean;
