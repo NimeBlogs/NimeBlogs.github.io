@@ -9,7 +9,7 @@ tags:
   - Blogging
 category: Examples
 featured: true
-draft: false
+draft: true
 ---
 
 # Featured Article Example

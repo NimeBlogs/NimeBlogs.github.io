@@ -7,7 +7,7 @@ tags:
   - Test
 category: Examples
 featured: true
-draft: false
+draft: true
 ---
 
 # Second Featured Article

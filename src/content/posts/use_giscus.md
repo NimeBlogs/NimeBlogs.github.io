@@ -4,8 +4,10 @@ published: 2025-10-04
 description: Fuwari + Giscus 评论系统
 tags:
   - Fuwari
+  - Featured
   - Giscus
   - Blog
+featured: true
 category: 折腾电脑记
 draft: false
 ---
