@@ -1,0 +1,186 @@
+---
+import type { CollectionEntry } from "astro:content";
+import path from "node:path";
+import { Icon } from "astro-icon/components";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import { getFeaturedPosts } from "../utils/content-utils";
+import { getDir } from "../utils/url-utils";
+import ImageWrapper from "./misc/ImageWrapper.astro";
+import PostMetadata from "./PostMeta.astro";
+
+interface Props {
+	limit?: number;
+	featuredTag?: string;
+}
+
+const { limit = 3, featuredTag = "Featured" } = Astro.props;
+const featuredPosts = await getFeaturedPosts(limit, featuredTag);
+---
+
+{featuredPosts.length > 0 && (
+    <div class="featured-posts-container my-12 onload-animation" style="animation-delay: 300ms;">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl font-bold flex items-center text-90 dark:text-white relative">
+        <Icon class="mr-2 text-[var(--primary)]" name="material-symbols:star" size={28} />
+        {i18n(I18nKey.featuredPosts)}
+        <span class="absolute -bottom-1 left-0 w-1/3 h-0.5 bg-[var(--primary)] rounded-full transition-all duration-300 group-hover:w-full"></span>
+      </h2>
+      <div class="hidden md:flex items-center gap-2 text-sm text-70 dark:text-30">
+        <span>{featuredPosts.length} {featuredPosts.length === 1 ? i18n(I18nKey.post) : i18n(I18nKey.posts)}</span>
+        <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></span>
+        <span class="italic">Featured</span>
+      </div>
+    </div>
+    
+    <!-- Horizontal scrollable container with elegant gradient masks -->
+    <div class="relative">
+      <!-- Gradient masks for elegant scroll edges -->
+      <div class="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
+      
+      <div 
+        class="featured-scroll-container flex overflow-x-auto pb-6 scrollbar-hide gap-6 snap-x snap-mandatory relative z-0"
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {featuredPosts.map((post) => (
+          <div 
+            key={post.slug} 
+            class="relative group transition-all duration-500 hover:shadow-xl hover:-translate-y-1 min-w-[300px] sm:min-w-[500px] md:min-w-[650px] max-w-full snap-start"
+          >
+            <div class="card-base flex flex-col md:flex-row h-full rounded-[var(--radius-large)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-md hover:shadow-xl transition-all duration-300">
+              <!-- Text content (left side) -->
+              <div class="p-5 md:p-6 flex-grow flex flex-col w-full md:w-1/2">
+                <a href={`/posts/${post.slug}/`} class="font-bold text-xl sm:text-2xl mb-3 line-clamp-2 group text-90 dark:text-white hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors">
+                  {post.data.title}
+                </a>
+                
+                <PostMetadata 
+                  published={new Date(post.data.published)}
+                  updated={post.data.updated ? new Date(post.data.updated) : undefined}
+                  tags={post.data.tags || []}
+                  category={post.data.category || null}
+                  hideTagsForMobile={true}
+                  hideUpdateDate={true}
+                  class="mb-4"
+                />
+                
+                <p class="text-75 mb-6 line-clamp-3 md:line-clamp-5 flex-grow leading-relaxed">
+                  {post.data.description || ""}
+                </p>
+                
+                <a href={`/posts/${post.slug}/`} class="inline-flex items-center text-sm font-medium text-[var(--primary)] hover:text-[var(--primary-hover)] dark:text-[var(--primary)] dark:hover:text-[var(--primary-hover)] transition-all duration-300 py-2.5 px-5 rounded-full bg-[var(--primary)]/5 dark:bg-[var(--primary)]/10 hover:bg-[var(--primary)]/10 dark:hover:bg-[var(--primary)]/20 hover:shadow-md transform hover:-translate-y-0.5 self-start">
+                  {i18n(I18nKey.readMore)}
+                  <Icon name="material-symbols:chevron-right" class="ml-1.5 transition-transform group-hover:translate-x-0.5" size={16} />
+                </a>
+              </div>
+              
+              <!-- Image content (right side) with elegant hover effects -->
+              {post.data.image && (
+                <a href={`/posts/${post.slug}/`} aria-label={post.data.title} class="group relative w-full md:w-1/2 h-48 md:h-auto overflow-hidden">
+                  <div class="absolute inset-0 bg-gradient-to-l from-black/70 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <ImageWrapper 
+                    src={post.data.image} 
+                    basePath={path.join("content/posts/", getDir(post.id))} 
+                    contentPath={post.id}
+                    alt={`Cover Image of ${post.data.title}`}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <!-- Elegant play icon animation -->
+                  <div class="absolute bottom-4 left-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:-translate-y-2">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-full p-2 w-10 h-10 flex items-center justify-center transform transition-all group-hover:scale-110">
+                      <Icon name="material-symbols:chevron-right" class="text-white text-xl" />
+                    </div>
+                  </div>
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <!-- Scroll indicators -->
+      <div class="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none px-2 md:px-4">
+        <button id="scrollLeft" class="scroll-indicator-left h-12 w-12 rounded-full bg-white/80 dark:bg-gray-800/80 flex items-center justify-center shadow-md pointer-events-auto transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900">
+          <Icon name="material-symbols:chevron-left" class="text-[var(--primary)] dark:text-[var(--primary)]" size={24} />
+        </button>
+        <button id="scrollRight" class="scroll-indicator-right h-12 w-12 rounded-full bg-white/80 dark:bg-gray-800/80 flex items-center justify-center shadow-md pointer-events-auto transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900 hover:scale-110">
+          <Icon name="material-symbols:chevron-right" class="text-[var(--primary)] dark:text-[var(--primary)]" size={24} />
+        </button>
+      </div>
+    </div>
+    
+    <script>
+      // Get DOM elements
+      const scrollContainer = document.querySelector('.featured-scroll-container');
+      const scrollLeftBtn = document.getElementById('scrollLeft');
+      const scrollRightBtn = document.getElementById('scrollRight');
+      
+      // Scroll amount (adjust based on your preference)
+      const scrollAmount = 300; // Default scroll amount in pixels
+      
+      // Handle scroll left button click with animation
+      scrollLeftBtn.addEventListener('click', () => {
+        scrollContainer.scrollBy({ 
+          left: -scrollAmount, 
+          behavior: 'smooth'
+        });
+        
+        // Add button animation
+        scrollLeftBtn.classList.add('scale-95');
+        setTimeout(() => scrollLeftBtn.classList.remove('scale-95'), 150);
+      });
+      
+      // Handle scroll right button click with animation
+      scrollRightBtn.addEventListener('click', () => {
+        scrollContainer.scrollBy({ 
+          left: scrollAmount, 
+          behavior: 'smooth'
+        });
+        
+        // Add button animation
+        scrollRightBtn.classList.add('scale-95');
+        setTimeout(() => scrollRightBtn.classList.remove('scale-95'), 150);
+      });
+      
+      // Auto-hide scroll indicators based on scroll position
+      function updateScrollIndicators() {
+        if (scrollContainer.scrollLeft <= 10) {
+          scrollLeftBtn.classList.add('opacity-0', 'pointer-events-none');
+        } else {
+          scrollLeftBtn.classList.remove('opacity-0', 'pointer-events-none');
+        }
+        
+        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth - 10) {
+          scrollRightBtn.classList.add('opacity-0', 'pointer-events-none');
+        } else {
+          scrollRightBtn.classList.remove('opacity-0', 'pointer-events-none');
+        }
+      }
+      
+      // Initialize scroll indicators visibility
+      updateScrollIndicators();
+      
+      // Add scroll event listener to update indicators
+      scrollContainer.addEventListener('scroll', updateScrollIndicators);
+      
+      // Add resize event listener to update indicators when window size changes
+      window.addEventListener('resize', updateScrollIndicators);
+      
+      // Cleanup event listeners on page unload
+      window.addEventListener('beforeunload', () => {
+        scrollLeftBtn.removeEventListener('click', updateScrollIndicators);
+        scrollRightBtn.removeEventListener('click', updateScrollIndicators);
+        scrollContainer.removeEventListener('scroll', updateScrollIndicators);
+        window.removeEventListener('resize', updateScrollIndicators);
+      });
+    </script>
+  </div>
+)}
+
+{featuredPosts.length === 0 && (
+  <div class="py-8 px-4 text-center text-75">
+    <p>{i18n(I18nKey.noFeaturedPosts)}</p>
+    <p class="text-sm mt-2">{i18n(I18nKey.addFeaturedTag)}</p>
+  </div>
+)}

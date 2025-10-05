@@ -4,6 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import ReadingProgress from "@components/ReadingProgress.svelte";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -148,9 +149,11 @@ const bannerOffset =
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
 	</head>
-	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
-		  data-overlayscrollbars-initialize
+	<body class="min-h-screen transition" class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
+		data-overlayscrollbars-initialize
 	>
+		<!-- 阅读进度指示器 -->
+		<ReadingProgress client:only="svelte" />
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
 
@@ -461,7 +464,8 @@ function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
 
 	if (backToTopBtn) {
-		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
+		// 当页面滚动超过300px时显示返回顶部按钮
+		if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
 			backToTopBtn.classList.remove('hide')
 		} else {
 			backToTopBtn.classList.add('hide')

@@ -7,16 +7,20 @@ export const zh_CN: Translation = {
 	[Key.archive]: "归档",
 	[Key.search]: "搜索",
 	[Key.friends]: "友链",
+	[Key.list]: "列表",
 
 	[Key.tags]: "标签",
 	[Key.categories]: "分类",
 	[Key.recentPosts]: "最新文章",
+	[Key.featuredPosts]: "特色文章",
 
 	[Key.comments]: "评论",
+	[Key.message]: "留言",
 
 	[Key.untitled]: "无标题",
 	[Key.uncategorized]: "未分类",
 	[Key.noTags]: "无标签",
+	[Key.noFeaturedPosts]: "暂无特色文章",
 
 	[Key.wordCount]: "字",
 	[Key.wordsCount]: "字",
@@ -32,8 +36,14 @@ export const zh_CN: Translation = {
 	[Key.systemMode]: "跟随系统",
 
 	[Key.more]: "更多",
+	[Key.readMore]: "阅读更多",
 
 	[Key.author]: "作者",
 	[Key.publishedAt]: "发布于",
 	[Key.license]: "许可协议",
+	[Key.previous]: "上一个",
+	[Key.next]: "下一个",
+	[Key.addFeaturedTag]: "添加'Featured'标签到文章即可在此显示",
+	[Key.relatedPosts]: "相关文章",
+	[Key.horoscope]: "今日运势",
 };

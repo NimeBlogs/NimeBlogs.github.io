@@ -1,0 +1,140 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import { getPostUrlBySlug, getDir } from "../utils/url-utils";
+import ImageWrapper from "./misc/ImageWrapper.astro";
+
+interface Props {
+	relatedPosts: CollectionEntry<"posts">[];
+}
+
+const { relatedPosts } = Astro.props;
+
+// 生成随机图片URL的函数
+const getRandomImageUrl = (width = 400, height = 225): string => {
+  // 生成真正随机的图片URL
+  return `https://picsum.photos/${width}/${height}?random=${Math.random()}`;
+};
+---
+
+{relatedPosts.length > 0 && (
+  <div class="related-posts-container card-base rounded-[var(--radius-large)] overflow-hidden mb-4">
+    <div class="related-posts-header px-6 md:px-9 pt-6 pb-3 border-b border-dashed border-black/10 dark:border-white/[0.15]">
+      <h3 class="text-xl font-bold text-black/90 dark:text-white/90 flex items-center">
+        <Icon name="material-symbols:link-rounded" class="mr-2 text-[var(--primary)]" size={20} />
+        {i18n(I18nKey.relatedPosts)}
+      </h3>
+    </div>
+    
+    <div class="related-posts-grid px-6 md:px-9 py-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {relatedPosts.map((post) => (
+        <a 
+          href={getPostUrlBySlug(post.slug)} 
+          key={post.slug} 
+          class="related-post-card group flex flex-col bg-white dark:bg-gray-900 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-all duration-300 active:scale-98"
+          aria-label={post.data.title}
+        >
+          <!-- 使用文章已有图片，如果没有则使用随机图片 -->
+          <div class="relative w-full h-40 overflow-hidden">
+            {post.data.image ? (
+              <ImageWrapper 
+                src={post.data.image} 
+                basePath={post.id ? `content/posts/${getDir(post.id)}` : undefined} 
+                contentPath={post.id} 
+                alt={`Cover of ${post.data.title}`} 
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <ImageWrapper 
+                src={getRandomImageUrl()} 
+                alt={`Cover of ${post.data.title}`} 
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            )}
+          </div>
+          
+          <div class="p-4 flex flex-col flex-grow">
+            <h4 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-[var(--primary)] transition-colors duration-300">
+              {post.data.title}
+            </h4>
+            
+            <!-- 非悬停状态下只显示日期 -->
+            <div class="text-sm text-black/50 dark:text-white/50 mt-auto group-hover:opacity-0 transition-opacity duration-300">
+              <time datetime={post.data.published.toISOString()}>
+                {new Date(post.data.published).toLocaleDateString('zh-CN', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </time>
+            </div>
+          </div>
+          
+          <!-- 悬停时显示的额外信息 - 精致的向上延伸效果 -->
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white/85 to-white/75 dark:bg-gradient-to-t from-gray-900/85 to-gray-900/75 backdrop-blur-md rounded-t-xl border-t border-white/20 dark:border-gray-800/50 shadow-inner shadow-black/5 flex flex-col p-4 opacity-0 group-hover:opacity-100 transition-all duration-400 transform group-hover:translate-y-0 translate-y-2 z-30 h-4/5">
+            <h4 class="font-bold text-lg mb-2 line-clamp-2 text-[var(--primary)] transition-transform duration-300 group-hover:translate-y-0 translate-y-1">
+              {post.data.title}
+            </h4>
+            
+            {post.data.description && (
+              <p class="text-sm text-black/70 dark:text-white/70 mb-3 line-clamp-3 flex-grow transition-opacity duration-300 group-hover:opacity-100 opacity-0" style="transition-delay: 50ms">
+                {post.data.description}
+              </p>
+            )}
+            
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-1.5 mb-2 transition-opacity duration-300 group-hover:opacity-100 opacity-0" style="transition-delay: 100ms">
+                {post.data.tags.slice(0, 3).map((tag: string, index: number) => (
+                  <span key={tag} class="px-2 py-1 bg-[var(--primary)]/10 dark:bg-[var(--primary)]/20 text-[var(--primary)] text-xs rounded-full hover:bg-[var(--primary)]/20 dark:hover:bg-[var(--primary)]/30 transition-all duration-200 transform hover:scale-105" style={`transition-delay: ${120 + index * 30}ms`}>
+                    {tag}
+                  </span>
+                ))}
+                {post.data.tags.length > 3 && (
+                  <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-black/50 dark:text-white/50 text-xs rounded-full transition-all duration-200" style="transition-delay: 210ms">
+                    +{post.data.tags.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  
+  @media (max-width: 768px) {
+    .related-posts-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+  
+  /* 增强相关文章卡片的视觉效果 */
+  .related-post-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* 为绝对定位的子元素提供参考 */
+    overflow: hidden; /* 防止内容溢出 */
+  }
+  
+  .related-post-card .relative {
+    position: relative;
+  }
+  
+  /* 确保文字部分不会被图片遮挡 */
+  .related-post-card > div:nth-child(2) {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* 为绝对定位的悬停内容提供参考 */
+  }
+</style>

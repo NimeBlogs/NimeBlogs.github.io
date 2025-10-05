@@ -8,20 +8,29 @@ interface Props {
 	alt?: string;
 	position?: string;
 	basePath?: string;
+	// 添加contentPath属性，用于指定内容文件所在路径
+	contentPath?: string;
 }
 
 import { Image } from "astro:assets";
 import { url } from "../../utils/url-utils";
 
-const { id, src, alt, position = "center", basePath = "/" } = Astro.props;
+const { id, src, alt, position = "center", basePath = "/", contentPath } = Astro.props;
 const className = Astro.props.class;
 
-const isLocal = !(
+// 判断是否为相对路径的本地图片（不以/、http、https、data:开头）
+const isRelativeLocal = !(
 	src.startsWith("/") ||
 	src.startsWith("http") ||
 	src.startsWith("https") ||
 	src.startsWith("data:")
 );
+
+// 判断是否为绝对路径的本地图片（以/开头）
+const isAbsoluteLocal = src.startsWith("/") && 
+	!(src.startsWith("http") || src.startsWith("https"));
+
+const isLocal = isRelativeLocal || isAbsoluteLocal;
 const isPublic = src.startsWith("/");
 
 // TODO temporary workaround for images dynamic import
@@ -29,19 +38,101 @@ const isPublic = src.startsWith("/");
 // biome-ignore lint/suspicious/noImplicitAnyLet: <check later>
 let img;
 if (isLocal) {
-	const files = import.meta.glob<ImageMetadata>("../../**", {
-		import: "default",
-	});
-	let normalizedPath = path
-		.normalize(path.join("../../", basePath, src))
-		.replace(/\\/g, "/");
-	const file = files[normalizedPath];
-	if (!file) {
-		console.error(
-			`\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
-		);
+	if (isRelativeLocal) {
+		// 尝试两种路径策略
+		let found = false;
+		let normalizedPath;
+		let file;
+		
+		// 策略1: 首先尝试直接从content目录加载（与md文档同目录）
+		if (contentPath) {
+			console.log(`Debug: Content path received: ${contentPath}`);
+			
+			// 确保contentPath是完整路径格式
+			let fullContentPath = contentPath;
+			// 如果contentPath不包含'src/content'，则添加完整路径前缀
+			if (!contentPath.includes('src/content')) {
+				fullContentPath = `src/content/posts/${contentPath}`;
+			}
+			
+			const contentDir = path.dirname(fullContentPath);
+			console.log(`Debug: Content directory: ${contentDir}`);
+			
+			// 构建正确的相对路径 - 从组件位置到内容目录
+			normalizedPath = path
+				.normalize(path.join("../../", contentDir, src))
+				.replace(/\\/g, "/");
+			
+			// 尝试多种路径格式确保找到图片
+			const possiblePaths = [
+				normalizedPath,
+				// 尝试直接从src/content开始的路径
+				path.normalize(path.join("../../", fullContentPath, '..', src)).replace(/\\/g, "/"),
+				// 尝试从posts目录开始的路径
+				path.normalize(path.join("../../src/content/posts", path.basename(contentDir), src)).replace(/\\/g, "/")
+			];
+			
+			const contentFiles = import.meta.glob<ImageMetadata>("../../src/content/**/*.*", {
+				import: "default",
+			});
+			
+			console.log(`Debug: Looking for image '${src}' in possible paths:`);
+			possiblePaths.forEach((path) => console.log(`- Trying: ${path}`));
+			
+			// 遍历所有可能的路径，找到第一个存在的
+			for (const path of possiblePaths) {
+				if (contentFiles[path]) {
+					file = contentFiles[path];
+					console.log(`Debug: Found image at: ${path}`);
+					break;
+				}
+			}
+			
+			if (file) {
+				try {
+					img = await file();
+					found = true;
+				} catch (error) {
+					console.warn(`Failed to load image from content path: ${normalizedPath}`, error);
+				}
+			} else {
+				console.error(`Debug: Could not find image '${src}' in any of the possible paths.`);
+			}
+			
+		}
+		
+		// 策略2: 如果策略1失败，使用原来的basePath路径
+		if (!found) {
+			const files = import.meta.glob<ImageMetadata>("../../**", {
+				import: "default",
+			});
+			normalizedPath = path
+				.normalize(path.join("../../", basePath, src))
+				.replace(/\\/g, "/");
+			file = files[normalizedPath];
+			
+			if (!file) {
+				console.error(
+					`\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
+				);
+				img = undefined;
+			} else {
+				img = await file();
+			}
+		}
+	} else if (isAbsoluteLocal) {
+		// 对于绝对路径的本地图片，我们直接使用src路径
+		// 因为public目录下的文件在构建时会被直接复制
+		// 不需要动态导入
+		try {
+			// 验证路径是否有效（简化验证，实际加载由浏览器处理）
+			// 设置img为true表示可以安全使用该路径
+			img = true;
+		} catch (error) {
+			console.error(`\n[ERROR] Failed to load absolute path image: ${src}`, error);
+			img = undefined;
+		}
 	}
-	img = await file();
 }
 
 const imageClass = "w-full h-full object-cover";
@@ -49,6 +140,8 @@ const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative']}>
     <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
-    {isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle}/>}
-    {!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle}/>}
+    <!-- 相对路径的本地图片，使用Image组件 -->
+    {isRelativeLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle}/>}
+    <!-- 绝对路径的本地图片或远程图片，使用普通img标签 -->
+    {(isAbsoluteLocal && img) || !isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle}/>}
 </div>

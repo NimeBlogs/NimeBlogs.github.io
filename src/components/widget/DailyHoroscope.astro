@@ -1,0 +1,412 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="horoscope-container card-base rounded-[var(--radius-large)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-md w-full transition-all duration-300 hover:shadow-lg">
+  <div class="p-5">
+    <h3 class="text-xl font-bold text-90 dark:text-white mb-4 flex items-center">
+      <Icon class="mr-2 text-[var(--primary)]" name="material-symbols:stars" size={24} />
+      今日运势
+    </h3>
+    
+    <script>
+      // 计算今日星座运势（基于日期的简单算法）
+      const today = new Date();
+      const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+      const luckScore = (dayOfYear % 10) + 3; // 3-12分的运势评分
+      
+      // 运势描述数组 - 更加详细的描述
+      const luckDescriptions = [
+        "今天你的运势不太理想，建议保持低调，避免冒险决策。工作上可能会遇到一些阻力，建议多与同事沟通协作。财运方面需谨慎投资，健康方面注意休息，避免过度劳累。",
+        "今天可能会遇到一些小挫折，但保持耐心就能度过难关。工作上会有一些挑战，但正是展现你能力的好机会。财运一般，适合稳健的理财方式。健康方面要注意饮食规律，保持适量运动。",
+        "今天运势平稳，适合按部就班地完成计划。工作上按计划进行，会有不错的进展。财运稳定，可能会有一些意外之财。健康状况良好，保持积极的心态很重要。",
+        "今天运势不错，适合开展新计划或与人合作。工作上会有新的机会出现，勇敢把握吧！财运较好，适合进行一些合理的投资。健康方面精力充沛，可以尝试一些新的运动方式。",
+        "今天运势极佳，是展现自己才华的好时机！工作上会有突破性的进展，得到上级的认可。财运亨通，可能会有意外的收入。健康状况非常好，心情也会很愉悦。"
+      ];
+      
+      // 基于日期选择描述
+      const descriptionIndex = (dayOfYear % luckDescriptions.length);
+      const luckDescription = luckDescriptions[descriptionIndex];
+      
+      // 幸运颜色
+      const luckyColors = ["热情红", "智慧蓝", "活力绿", "阳光黄", "神秘紫", "浪漫粉"];
+      const luckyColor = luckyColors[dayOfYear % luckyColors.length];
+      
+      // 幸运数字
+      const luckyNumber = (dayOfYear % 9) + 1;
+      
+      // 计算星级评分（1-5星）
+      const starRating = Math.min(Math.floor(luckScore / 2), 5);
+      const emptyStars = 5 - starRating;
+      
+      // 财运评分
+      const wealthScore = (dayOfYear % 9) + 1;
+      const wealthStarRating = Math.min(Math.floor(wealthScore / 2), 5);
+      const wealthEmptyStars = 5 - wealthStarRating;
+      
+      // 财运描述数组 - 更详细的财运预测和建议
+      const wealthDescriptions = [
+        "今天财运不佳，建议避免大额投资和冒险的财务决策。可能会有意外的小额支出，请注意控制预算。适合整理财务记录，规划未来的理财方向。",
+        "今天财运较低迷，适合保持现有的财务状况，不要轻举妄动。工作收入稳定，但额外收入机会较少。可以考虑学习理财知识，为未来做准备。",
+        "今天财运一般，收支平衡，没有特别的理财机会。适合进行日常消费，但不适合大额采购。建议检查银行账户，确保财务安全。",
+        "今天财运平稳，可能会有一些小额收入，保持稳健的投资策略。工作上可能会有奖金或津贴，虽然数额不大但也值得高兴。可以考虑购买一些实用的物品。",
+        "今天财运不错，有机会获得额外收入，适合进行一些小的投资。可能会收到礼物或意外之财，可以考虑将部分资金用于储蓄或小额投资。适合规划短期理财目标。",
+        "今天财运良好，适合规划长期投资，可能会有意想不到的收获。工作上表现出色可能会得到奖励，投资方面也有不错的机会。建议关注低风险的投资产品。",
+        "今天财运很好，适合积极寻找投资机会，可能会有不错的回报。可能会有意外的收入来源，投资决策也容易获得成功。可以考虑扩大投资组合，但仍需保持谨慎。",
+        "今天财运极佳，可能会有意外之财，是理财的好日子。工作上可能会有升职加薪的机会，投资也会获得丰厚回报。适合制定长期的财务规划和目标。",
+        "今天财运非常旺盛，投资可能会获得丰厚回报，但也要注意风险控制。可能会有多个收入来源，财务状况非常理想。可以考虑进行一些中等风险的投资，但不要过度冒险。",
+        "今天财运爆表，是积累财富的绝佳时机，可以考虑大胆的财务决策。可能会有重大的财务突破，投资回报惊人。适合寻求专业的理财建议，制定全面的财富增长计划。"
+      ];
+      const wealthDescription = wealthDescriptions[wealthScore - 1];
+      
+      // 事业评分
+      const careerScore = (dayOfYear % 8) + 1;
+      const careerStarRating = Math.min(Math.floor(careerScore / 2), 5);
+      const careerEmptyStars = 5 - careerStarRating;
+      
+      // 事业描述数组 - 更详细的事业预测和建议
+      const careerDescriptions = [
+        "今天工作压力较大，容易遇到阻碍，建议保持耐心。可能会有突发情况需要处理，工作进度可能会受到影响。建议提前制定计划，预留缓冲时间，避免因压力而影响工作质量。",
+        "今天工作进展缓慢，可能会有一些小挫折，需要仔细处理。与同事或上司的沟通可能会有些不畅，项目推进遇到阻力。建议保持冷静，多听取他人意见，寻找解决问题的方法。",
+        "今天工作状态一般，按部就班完成任务即可。没有太多的挑战，但也没有特别的机会。适合完成日常工作，整理文件和资料，为未来的工作做好准备。",
+        "今天工作平稳，没有太大的挑战，适合整理之前的工作成果。可以回顾近期的工作表现，总结经验教训，制定改进计划。与同事的关系融洽，团队合作顺利。",
+        "今天工作状态不错，可能会得到同事的帮助，任务完成顺利。工作效率有所提高，能够按时完成任务。适合与同事交流合作，分享工作经验，共同进步。",
+        "今天工作效率很高，适合处理重要任务，可能会得到领导的认可。思维清晰，决策果断，能够有效地解决工作中的问题。建议主动承担一些有挑战性的任务，展示自己的能力。",
+        "今天工作运势很好，可能会有新的机会出现，勇敢把握。领导对你的工作表现印象良好，可能会给予更多的关注和支持。适合提出新的想法和建议，展示自己的创新能力。",
+        "今天工作运势极佳，创意和想法容易得到采纳，是展现自己的好时机。工作进展顺利，项目取得重大突破，得到领导和同事的高度评价。适合积极参与重要会议和决策，扩大自己的影响力。",
+        "今天事业运非常好，可能会有晋升或加薪的机会，好好表现。工作能力得到充分认可，职业发展前景光明。适合制定长期的职业规划，设定明确的目标，为未来的发展做好准备。"
+      ];
+      const careerDescription = careerDescriptions[careerScore - 1];
+      
+      // 健康评分
+      const healthScore = (dayOfYear % 7) + 1;
+      const healthStarRating = Math.min(Math.floor(healthScore / 2), 5);
+      const healthEmptyStars = 5 - healthStarRating;
+      
+      // 健康描述数组 - 更详细的健康预测和建议
+      const healthDescriptions = [
+        "今天身体容易疲劳，建议多休息，避免剧烈运动。可能会感到乏力、精神不振，容易出现头痛或肌肉酸痛等症状。建议保证充足的睡眠，避免熬夜，饮食上多吃一些富含营养的食物，如新鲜蔬菜、水果和全谷物。",
+        "今天身体状况一般，注意饮食和休息，保持良好的生活习惯。可能会有轻微的不适，如消化不良、轻微感冒等症状。建议注意保暖，避免受凉，饮食上要规律，不要暴饮暴食，适当进行一些轻度的运动，如散步、瑜伽等。",
+        "今天身体状态平稳，适合进行一些轻度运动，保持活力。整体健康状况良好，但仍需注意保持良好的生活习惯。建议多喝水，保持充足的水分摄入，适当进行户外活动，呼吸新鲜空气，保持心情愉悦。",
+        "今天身体状况良好，精力充沛，可以适当增加运动量。身体各项指标正常，没有明显的不适症状。建议保持规律的作息时间，适当进行中等强度的运动，如慢跑、游泳、骑自行车等，增强体质。",
+        "今天身体状态很好，适合尝试新的运动方式，保持积极的生活态度。体力和耐力都有所提升，心情也很愉悦。建议尝试一些新的运动项目，如舞蹈、攀岩、滑雪等，丰富自己的运动体验，同时注意运动安全。",
+        "今天身体非常健康，心情也很愉悦，是享受生活的好日子。身体充满活力，精神饱满，没有任何不适症状。建议保持良好的生活习惯，合理安排工作和休息时间，适当进行户外活动，享受大自然的美好。",
+        "今天身体状态极佳，充满活力，适合参与各种户外活动。体力、耐力和免疫力都处于最佳状态，心情也非常愉悦。建议积极参与各种户外活动，如登山、徒步、露营等，充分享受健康带来的快乐。",
+        "今天身体状况爆表，精力充沛，心情舒畅，各方面都很顺利。身体机能达到最佳状态，思维清晰，反应敏捷。建议保持积极的心态，继续坚持健康的生活方式，同时也要注意劳逸结合，避免过度劳累。"
+      ];
+      const healthDescription = healthDescriptions[healthScore - 1];
+      
+      // 根据颜色名称获取颜色值
+      function getColorValue(colorName) {
+        const colorMap = {
+          "热情红": "#ff4d4f",
+          "智慧蓝": "#1890ff",
+          "活力绿": "#52c41a",
+          "阳光黄": "#faad14",
+          "神秘紫": "#722ed1",
+          "浪漫粉": "#eb2f96"
+        };
+        return colorMap[colorName] || "#8c8c8c";
+      }
+      
+      // 今日建议 - 更具体的每日行动建议
+      const dailyAdvice = [
+        "今天适合整理思绪，规划未来的方向。可以列出近期的目标和计划，分析当前的进展和挑战，制定详细的行动步骤。",
+        "多与朋友交流，分享你的想法和感受。可以约上三五好友聚餐或喝茶，增进彼此的感情，也可以从朋友那里获得新的思路和建议。",
+        "给自己一些独处的时间，反思近期的生活。可以找一个安静的地方，冥想或写日记，回顾自己的成长和变化，思考未来的发展方向。",
+        "尝试新的事物，开拓自己的视野。可以去尝试一家新的餐厅，看一场新上映的电影，或者学习一项新的技能，丰富自己的生活体验。",
+        "保持积极的心态，相信一切都会好起来。当遇到困难和挫折时，要学会调整自己的心态，看到事情积极的一面，相信自己一定能够克服困难。",
+        "帮助他人，你会收获更多的快乐。可以主动帮助身边需要帮助的人，或者参与一些公益活动，在帮助他人的同时，也能提升自己的幸福感。",
+        "注意休息，保持良好的作息习惯。合理安排工作和休息时间，保证充足的睡眠，避免熬夜和过度劳累，这样才能保持充沛的精力。",
+        "勇敢表达自己的想法，不要害怕被拒绝。在工作和生活中，要勇于表达自己的观点和想法，即使可能会被拒绝，也要敢于尝试。",
+        "珍惜当下，享受生活中的美好瞬间。不要总是沉浸在过去的回忆或未来的担忧中，要学会活在当下，发现和欣赏生活中的美好。"
+      ];
+      const advice = dailyAdvice[dayOfYear % dailyAdvice.length];
+      
+      // 添加新的运势维度：感情运
+      const loveScore = (dayOfYear % 10) + 1;
+      const loveStarRating = Math.min(Math.floor(loveScore / 2), 5);
+      const loveEmptyStars = 5 - loveStarRating;
+      
+      // 感情运描述数组
+      const loveDescriptions = [
+        "今天感情运势较低迷，容易与伴侣发生争执或误解。建议保持冷静，避免冲动行事，多站在对方的角度考虑问题。",
+        "今天感情运势一般，与伴侣的关系比较平淡。适合进行一些简单的交流，但不要讨论敏感话题。可以一起做一些轻松的事情，增进感情。",
+        "今天感情运势平稳，与伴侣的关系和谐。没有特别的矛盾或惊喜，适合保持现有的相处模式。可以一起规划未来的计划，增强彼此的默契。",
+        "今天感情运势不错，与伴侣的关系融洽。可能会有一些小惊喜或浪漫的时刻，适合表达自己的爱意和关心。可以安排一次温馨的约会。",
+        "今天感情运势良好，与伴侣的关系甜蜜。彼此之间的默契和信任度提高，沟通顺畅。适合分享内心的想法和感受，加深彼此的了解。",
+        "今天感情运势很好，与伴侣的关系亲密无间。可能会有重要的感情进展，如确定关系、订婚等。适合表达自己的承诺和决心。",
+        "今天感情运势极佳，单身者有机会遇到心仪的对象。已有伴侣的人感情更加稳固，可能会有浪漫的惊喜。适合积极主动地追求自己的幸福。",
+        "今天感情运势非常好，爱情运旺盛。单身者容易吸引异性的注意，有伴侣的人感情更加甜蜜。适合大胆表达自己的爱意，创造美好的回忆。",
+        "今天感情运势爆表，是爱情的幸运日。单身者可能会遇到真爱，有伴侣的人感情会更进一步。适合做出重要的感情决定，如求婚、结婚等。",
+        "今天感情运势完美，爱情和亲情都非常顺利。与家人和伴侣的关系都很融洽，充满爱和温暖。适合享受家庭的温馨和爱情的甜蜜。"
+      ];
+      const loveDescription = loveDescriptions[loveScore - 1];
+      
+      // 页面加载后执行
+      document.addEventListener('DOMContentLoaded', function() {
+        // 渲染总运势星星
+        const starsContainer = document.querySelector('.stars-container');
+        if (starsContainer) {
+          starsContainer.innerHTML = '';
+          for (let i = 0; i < starRating; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="18" class="text-yellow-400 fill-yellow-400" />';
+            starsContainer.appendChild(star);
+          }
+          for (let i = 0; i < emptyStars; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="18" class="text-gray-300 dark:text-gray-600" />';
+            starsContainer.appendChild(star);
+          }
+        }
+        
+        // 渲染财运星星
+        const wealthStarsContainer = document.querySelector('.wealth-stars-container');
+        if (wealthStarsContainer) {
+          wealthStarsContainer.innerHTML = '';
+          for (let i = 0; i < wealthStarRating; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
+            wealthStarsContainer.appendChild(star);
+          }
+          for (let i = 0; i < wealthEmptyStars; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
+            wealthStarsContainer.appendChild(star);
+          }
+        }
+        
+        // 渲染事业星星
+        const careerStarsContainer = document.querySelector('.career-stars-container');
+        if (careerStarsContainer) {
+          careerStarsContainer.innerHTML = '';
+          for (let i = 0; i < careerStarRating; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
+            careerStarsContainer.appendChild(star);
+          }
+          for (let i = 0; i < careerEmptyStars; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
+            careerStarsContainer.appendChild(star);
+          }
+        }
+        
+        // 渲染健康星星
+        const healthStarsContainer = document.querySelector('.health-stars-container');
+        if (healthStarsContainer) {
+          healthStarsContainer.innerHTML = '';
+          for (let i = 0; i < healthStarRating; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
+            healthStarsContainer.appendChild(star);
+          }
+          for (let i = 0; i < healthEmptyStars; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
+            healthStarsContainer.appendChild(star);
+          }
+        }
+        
+        // 渲染感情运星星
+        const loveStarsContainer = document.querySelector('.love-stars-container');
+        if (loveStarsContainer) {
+          loveStarsContainer.innerHTML = '';
+          for (let i = 0; i < loveStarRating; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-yellow-400 fill-yellow-400" />';
+            loveStarsContainer.appendChild(star);
+          }
+          for (let i = 0; i < loveEmptyStars; i++) {
+            const star = document.createElement('span');
+            star.className = 'inline-block mr-0.5';
+            star.innerHTML = '<Icon name="material-symbols:star" size="14" class="text-gray-300 dark:text-gray-600" />';
+            loveStarsContainer.appendChild(star);
+          }
+        }
+        
+        // 设置其他内容
+        if (document.querySelector('.luck-score')) {
+          document.querySelector('.luck-score').textContent = luckScore + '/12';
+        }
+        if (document.querySelector('.luck-description')) {
+          document.querySelector('.luck-description').textContent = luckDescription;
+        }
+        if (document.querySelector('.color-dot')) {
+          document.querySelector('.color-dot').style.backgroundColor = getColorValue(luckyColor);
+        }
+        if (document.querySelector('.lucky-color')) {
+          document.querySelector('.lucky-color').textContent = luckyColor;
+        }
+        if (document.querySelector('.lucky-number')) {
+          document.querySelector('.lucky-number').textContent = luckyNumber;
+        }
+        if (document.querySelector('.update-date')) {
+          // 增加详细日期显示，包括星期几
+          const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+          const weekDay = weekDays[today.getDay()];
+          const formattedDate = today.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+          document.querySelector('.update-date').textContent = formattedDate + ' ' + weekDay;
+        }
+        if (document.querySelector('.daily-advice')) {
+          document.querySelector('.daily-advice').textContent = advice;
+        }
+        if (document.querySelector('.wealth-score')) {
+          document.querySelector('.wealth-score').textContent = wealthScore + '/10';
+        }
+        if (document.querySelector('.career-score')) {
+          document.querySelector('.career-score').textContent = careerScore + '/9';
+        }
+        if (document.querySelector('.health-score')) {
+          document.querySelector('.health-score').textContent = healthScore + '/8';
+        }
+        if (document.querySelector('.wealth-description')) {
+          document.querySelector('.wealth-description').textContent = wealthDescription;
+        }
+        if (document.querySelector('.career-description')) {
+          document.querySelector('.career-description').textContent = careerDescription;
+        }
+        if (document.querySelector('.health-description')) {
+          document.querySelector('.health-description').textContent = healthDescription;
+        }
+        if (document.querySelector('.love-score')) {
+          document.querySelector('.love-score').textContent = loveScore + '/10';
+        }
+        if (document.querySelector('.love-description')) {
+          document.querySelector('.love-description').textContent = loveDescription;
+        }
+      });
+    </script>
+    
+    <div class="mb-4">
+      <!-- 总运势评分 -->
+      <div class="flex items-center mb-3">
+        <span class="text-sm text-70 dark:text-30 mr-2">总评分:</span>
+        <div class="flex items-center">
+          <div class="stars-container"></div>
+          <span class="ml-2 text-sm font-medium text-80 dark:text-20 luck-score"></span>
+        </div>
+      </div>
+      
+      <!-- 运势详细描述 -->
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 rounded-lg p-4 mb-4">
+        <p class="text-sm text-75 dark:text-30 leading-relaxed luck-description"></p>
+      </div>
+      
+      <!-- 分类运势评分 -->
+      <div class="grid grid-cols-1 gap-3 mb-4">
+        <!-- 财运 -->
+        <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-100 dark:border-green-800/30">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center">
+              <Icon name="material-symbols:tag-rounded" size="16" class="mr-2 text-green-600 dark:text-green-400" />
+              <span class="text-sm font-medium text-80 dark:text-20">财运</span>
+            </div>
+            <div class="flex items-center">
+              <div class="wealth-stars-container"></div>
+              <span class="ml-1 text-xs text-70 dark:text-30 wealth-score"></span>
+            </div>
+          </div>
+          <p class="text-xs text-60 dark:text-40 mt-1 wealth-description"></p>
+        </div>
+        
+        <!-- 事业 -->
+        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 border border-purple-100 dark:border-purple-800/30">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center">
+              <Icon name="material-symbols:book-2-outline-rounded" size="16" class="mr-2 text-purple-600 dark:text-purple-400" />
+              <span class="text-sm font-medium text-80 dark:text-20">事业</span>
+            </div>
+            <div class="flex items-center">
+              <div class="career-stars-container"></div>
+              <span class="ml-1 text-xs text-70 dark:text-30 career-score"></span>
+            </div>
+          </div>
+          <p class="text-xs text-60 dark:text-40 mt-1 career-description"></p>
+        </div>
+        
+        <!-- 健康 -->
+        <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-3 border border-red-100 dark:border-red-800/30">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center">
+              <Icon name="material-symbols:calendar-today-outline-rounded" size="16" class="mr-2 text-red-600 dark:text-red-400" />
+              <span class="text-sm font-medium text-80 dark:text-20">健康</span>
+            </div>
+            <div class="flex items-center">
+              <div class="health-stars-container"></div>
+              <span class="ml-1 text-xs text-70 dark:text-30 health-score"></span>
+            </div>
+          </div>
+          <p class="text-xs text-60 dark:text-40 mt-1 health-description"></p>
+        </div>
+        
+        <!-- 感情运 -->
+        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-3 border border-pink-100 dark:border-pink-800/30">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center">
+              <Icon name="material-symbols:star" size="16" class="mr-2 text-pink-600 dark:text-pink-400" />
+              <span class="text-sm font-medium text-80 dark:text-20">感情运</span>
+            </div>
+            <div class="flex items-center">
+              <div class="love-stars-container"></div>
+              <span class="ml-1 text-xs text-70 dark:text-30 love-score"></span>
+            </div>
+          </div>
+          <p class="text-xs text-60 dark:text-40 mt-1 love-description"></p>
+        </div>
+      </div>
+      
+      <!-- 幸运元素 -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 transition-all hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-100 dark:border-gray-700">
+          <div class="text-xs text-60 dark:text-40 mb-1 flex items-center">
+            <Icon name="material-symbols:palette-outline" size="12" class="mr-1" />
+            幸运颜色
+          </div>
+          <div class="flex items-center">
+            <span class="inline-block w-4 h-4 rounded-full mr-2 color-dot"></span>
+            <span class="text-sm font-medium text-80 dark:text-20 lucky-color"></span>
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 transition-all hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-100 dark:border-gray-700">
+          <div class="text-xs text-60 dark:text-40 mb-1 flex items-center">
+            <Icon name="material-symbols:edit-calendar-outline-rounded" size="12" class="mr-1" />
+            幸运数字
+          </div>
+          <div class="text-sm font-medium text-80 dark:text-20 lucky-number"></div>
+        </div>
+      </div>
+      
+      <!-- 今日建议 -->
+      <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800/30 rounded-lg p-3 mb-4">
+        <div class="text-xs text-60 dark:text-40 mb-1 flex items-center">
+            <Icon name="material-symbols:star" size="12" class="mr-1 text-yellow-500 dark:text-yellow-400" />
+            今日建议
+          </div>
+        <p class="text-sm text-75 dark:text-30 daily-advice"></p>
+      </div>
+    </div>
+    
+    <div class="flex flex-col space-y-3">
+      <div class="text-center mb-2">
+        <span class="update-date text-lg font-semibold text-80 dark:text-20"></span>
+      </div>
+      <div class="flex justify-center">
+        <a href="/horoscope/" class="text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors flex items-center">
+          查看详细运势 <Icon name="material-symbols:chevron-right-rounded" size={16} class="inline ml-1" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

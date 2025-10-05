@@ -6,16 +6,21 @@ export const en: Translation = {
 	[Key.about]: "About",
 	[Key.archive]: "Archive",
 	[Key.search]: "Search",
+	[Key.list]: "List",
+	[Key.message]: "Message",
+	[Key.friends]: "Friends",
 
 	[Key.tags]: "Tags",
 	[Key.categories]: "Categories",
 	[Key.recentPosts]: "Recent Posts",
+	[Key.featuredPosts]: "Featured Posts",
 
 	[Key.comments]: "Comments",
 
 	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",
+	[Key.noFeaturedPosts]: "No featured posts yet",
 
 	[Key.wordCount]: "word",
 	[Key.wordsCount]: "words",
@@ -31,8 +36,12 @@ export const en: Translation = {
 	[Key.systemMode]: "System",
 
 	[Key.more]: "More",
+	[Key.readMore]: "Read more",
 
 	[Key.author]: "Author",
 	[Key.publishedAt]: "Published at",
 	[Key.license]: "License",
+	[Key.previous]: "Previous",
+	[Key.next]: "Next",
+	[Key.addFeaturedTag]: "Add 'Featured' tag to posts to display them here",
 };

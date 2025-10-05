@@ -6,9 +6,11 @@ tags:
   - Fuwari
   - Astro
   - Blog
+  - Featured
 category: 折腾电脑记
 draft: false
 image: ./cover.png
+featured: true
 ---
 
 ### 关于 Fuwari

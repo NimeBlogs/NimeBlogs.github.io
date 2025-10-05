@@ -4,6 +4,67 @@
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
     }
+    
+    /* featured carousel */
+    .featured-carousel {
+        --carousel-height: 400px;
+        margin-bottom: 2rem;
+    }
+    
+    .featured-carousel .card-base {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .featured-carousel .card-base a {
+        transition: all 0.3s ease;
+    }
+    
+    .featured-carousel .card-base a:hover {
+        color: var(--primary);
+    }
+    
+    .featured-carousel h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--title);
+    }
+    
+    /* Carousel navigation */
+    .featured-carousel button {
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .featured-carousel button:hover {
+        background-color: var(--hover-bg);
+    }
+    
+    .featured-carousel button:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .featured-carousel {
+            --carousel-height: 350px;
+        }
+        
+        .featured-carousel h2 {
+            font-size: 1.25rem;
+        }
+    }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
     }

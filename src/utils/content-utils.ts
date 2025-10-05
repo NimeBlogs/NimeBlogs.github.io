@@ -98,6 +98,7 @@ export async function getCategoryList(): Promise<Category[]> {
 		count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
 	});
 
+	// Sort categories
 	const lst = Object.keys(count).sort((a, b) => {
 		return a.toLowerCase().localeCompare(b.toLowerCase());
 	});
@@ -110,5 +111,81 @@ export async function getCategoryList(): Promise<Category[]> {
 			url: getCategoryUrl(c),
 		});
 	}
+
 	return ret;
+}
+
+/**
+ * Get featured posts
+ * @param limit Maximum number of posts to return
+ * @param featuredTag Optional tag to identify featured posts
+ * @returns Array of featured posts
+ */
+export async function getFeaturedPosts(
+	limit = 3,
+	featuredTag = "Featured",
+): Promise<CollectionEntry<"posts">[]> {
+	const allBlogPosts = await getCollection("posts", ({ data }) => {
+		// Include posts that are not drafts and either:
+		// 1. Have a 'featured' field set to true, or
+		// 2. Have the featuredTag in their tags array
+		return (
+			(import.meta.env.PROD ? data.draft !== true : true) &&
+			((data as any).featured === true || data.tags?.includes(featuredTag))
+		);
+	});
+
+	// Sort by publication date (newest first)
+	return allBlogPosts
+		.sort((a, b) => {
+			const dateA = new Date(a.data.published);
+			const dateB = new Date(b.data.published);
+			return dateA > dateB ? -1 : 1;
+		})
+		.slice(0, limit);
+}
+
+/**
+ * Get related posts based on tags
+ * @param currentPost The current post
+ * @param limit Maximum number of posts to return
+ * @returns Array of related posts
+ */
+export async function getRelatedPosts(
+	currentPost: CollectionEntry<"posts">,
+	limit = 3,
+): Promise<CollectionEntry<"posts">[]> {
+	const allBlogPosts = await getCollection("posts", ({ data, slug }) => {
+		// Exclude drafts and the current post
+		return (
+			(import.meta.env.PROD ? data.draft !== true : true) &&
+			slug !== currentPost.slug
+		);
+	});
+
+	// Calculate similarity score based on common tags
+	const postsWithScore = allBlogPosts.map((post) => {
+		const commonTags = currentPost.data.tags.filter((tag) =>
+			post.data.tags?.includes(tag),
+		);
+		return {
+			post,
+			score: commonTags.length,
+		};
+	});
+
+	// Sort by similarity score (highest first) and then by publication date
+	return postsWithScore
+		.filter((item) => item.score > 0) // Only include posts with at least one common tag
+		.sort((a, b) => {
+			if (a.score !== b.score) {
+				return b.score - a.score;
+			}
+			// If scores are equal, sort by publication date (newest first)
+			const dateA = new Date(a.post.data.published);
+			const dateB = new Date(b.post.data.published);
+			return dateA > dateB ? -1 : 1;
+		})
+		.slice(0, limit)
+		.map((item) => item.post);
 }

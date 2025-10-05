@@ -3,16 +3,21 @@ enum I18nKey {
 	about = "about",
 	archive = "archive",
 	search = "search",
+	list = "list",
 
 	tags = "tags",
 	categories = "categories",
 	recentPosts = "recentPosts",
+	message = "message",
+	featuredPosts = "featuredPosts",
+	relatedPosts = "relatedPosts",
 
 	comments = "comments",
 
 	untitled = "untitled",
 	uncategorized = "uncategorized",
 	noTags = "noTags",
+	noFeaturedPosts = "noFeaturedPosts",
 
 	wordCount = "wordCount",
 	wordsCount = "wordsCount",
@@ -28,11 +33,16 @@ enum I18nKey {
 	systemMode = "systemMode",
 
 	more = "more",
+	readMore = "readMore",
 
 	author = "author",
 	publishedAt = "publishedAt",
 	license = "license",
 	friends = "friends",
+	previous = "previous",
+	next = "next",
+	addFeaturedTag = "addFeaturedTag",
+	horoscope = "horoscope",
 }
 
 export default I18nKey;
