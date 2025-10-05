@@ -8,8 +8,8 @@ tags:
   - Featured
   - Giscus
   - Blog
-featured: true
 category: 折腾电脑记
+featured: true
 draft: false
 series: 折腾电脑记
 ---
