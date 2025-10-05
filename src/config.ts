@@ -43,15 +43,11 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
+		LinkPreset.Series,
 		LinkPreset.Friends,
 		LinkPreset.Message,
 		LinkPreset.List,
 		LinkPreset.About,
-		{
-			name: "GitHub",
-			url: "https://github.com/Tse-Yue", // Internal links should not include the base path, as it is automatically added
-			external: true, // Show an external link icon and will open in a new tab
-		},
 		{
 			name: "洛谷",
 			url: "https://www.luogu.com.cn/user/762100", // Internal links should not include the base path, as it is automatically added

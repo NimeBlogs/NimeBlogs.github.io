@@ -5,7 +5,7 @@ const postsCollection = defineCollection({
 		title: z.string(),
 		published: z.date(),
 		updated: z.date().optional(),
-		publishAt: z.date().optional(), // 定时发布时间
+		series: z.string().optional(),
 		draft: z.boolean().optional().default(false),
 		description: z.string().optional().default(""),
 		image: z.string().optional().default(""),

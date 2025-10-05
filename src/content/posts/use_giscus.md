@@ -11,6 +11,7 @@ tags:
 featured: true
 category: 折腾电脑记
 draft: false
+series: 折腾电脑记
 ---
 
 :::poem{title="标题" author="作者"}

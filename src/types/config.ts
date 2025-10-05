@@ -47,10 +47,11 @@ export type Favicon = {
 export enum LinkPreset {
 	Home = 0,
 	Archive = 1,
-	Friends = 2,
-	Message = 3,
-	List = 4,
-	About = 5,
+	Series = 2,
+	Friends = 3,
+	Message = 4,
+	List = 5,
+	About = 6,
 }
 
 export type NavBarLink = {
@@ -89,8 +90,8 @@ export type BlogPostData = {
 	body: string;
 	title: string;
 	published: Date;
-	publishAt?: Date; // 定时发布时间
 	description: string;
+	series?: string;
 	tags: string[];
 	draft?: boolean;
 	image?: string;

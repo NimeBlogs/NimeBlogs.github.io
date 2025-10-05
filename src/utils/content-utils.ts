@@ -6,24 +6,12 @@ import { getCategoryUrl } from "@utils/url-utils.ts";
 // // Retrieve posts and sort them by publication date
 async function getRawSortedPosts() {
 	const allBlogPosts = await getCollection("posts", ({ data }) => {
-		if (!import.meta.env.PROD) {
-			// 开发环境下显示所有文章（包括草稿和未到发布时间的文章）
-			return true;
-		}
-		
-		// 生产环境下：
-		// 1. 不是草稿
-		// 2. 如果设置了publishAt，需要当前时间已经到达或超过publishAt时间
-		const isNotDraft = data.draft !== true;
-		const isPublished = !data.publishAt || new Date(data.publishAt) <= new Date();
-		
-		return isNotDraft && isPublished;
+		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 
 	const sorted = allBlogPosts.sort((a, b) => {
-		// 使用publishAt作为排序依据（如果存在），否则使用published
-		const dateA = new Date(a.data.publishAt || a.data.published);
-		const dateB = new Date(b.data.publishAt || b.data.published);
+		const dateA = new Date(a.data.published);
+		const dateB = new Date(b.data.published);
 		return dateA > dateB ? -1 : 1;
 	});
 	return sorted;
@@ -62,15 +50,28 @@ export type Tag = {
 	name: string;
 	count: number;
 };
+export async function getPostSeries(
+  seriesName: string,
+): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
+  const posts = (await getCollection('posts', ({ data }) => {
+    return (
+      (import.meta.env.PROD ? data.draft !== true : true) &&
+      data.series === seriesName
+    )
+  })) as unknown as { body: string; data: BlogPostData; slug: string }[]
+
+  posts.sort((a, b) => {
+    const dateA = new Date(a.data.published)
+    const dateB = new Date(b.data.published)
+    return dateA > dateB ? 1 : -1
+  })
+
+  return posts
+}
 
 export async function getTagList(): Promise<Tag[]> {
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
-		if (!import.meta.env.PROD) {
-			return true;
-		}
-		const isNotDraft = data.draft !== true;
-		const isPublished = !data.publishAt || new Date(data.publishAt) <= new Date();
-		return isNotDraft && isPublished;
+		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 
 	const countMap: { [key: string]: number } = {};
@@ -97,12 +98,7 @@ export type Category = {
 
 export async function getCategoryList(): Promise<Category[]> {
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
-		if (!import.meta.env.PROD) {
-			return true;
-		}
-		const isNotDraft = data.draft !== true;
-		const isPublished = !data.publishAt || new Date(data.publishAt) <= new Date();
-		return isNotDraft && isPublished;
+		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	const count: { [key: string]: number } = {};
 	allBlogPosts.forEach((post: { data: { category: string | null } }) => {
@@ -148,20 +144,20 @@ export async function getFeaturedPosts(
 	featuredTag = "Featured",
 ): Promise<CollectionEntry<"posts">[]> {
 	const allBlogPosts = await getCollection("posts", ({ data }) => {
-		// Include posts that are not drafts, published (if publishAt is set), and either:
+		// Include posts that are not drafts and either:
 		// 1. Have a 'featured' field set to true, or
 		// 2. Have the featuredTag in their tags array
-		const isNotDraft = import.meta.env.PROD ? data.draft !== true : true;
-		const isPublished = !import.meta.env.PROD || !data.publishAt || new Date(data.publishAt) <= new Date();
-		const isFeatured = (data as any).featured === true || data.tags?.includes(featuredTag);
-		return isNotDraft && isPublished && isFeatured;
+		return (
+			(import.meta.env.PROD ? data.draft !== true : true) &&
+			((data as any).featured === true || data.tags?.includes(featuredTag))
+		);
 	});
 
-	// Sort by publication date (newest first), using publishAt if available
+	// Sort by publication date (newest first)
 	return allBlogPosts
 		.sort((a, b) => {
-			const dateA = new Date(a.data.publishAt || a.data.published);
-			const dateB = new Date(b.data.publishAt || b.data.published);
+			const dateA = new Date(a.data.published);
+			const dateB = new Date(b.data.published);
 			return dateA > dateB ? -1 : 1;
 		})
 		.slice(0, limit);
@@ -178,11 +174,11 @@ export async function getRelatedPosts(
 	limit = 3,
 ): Promise<CollectionEntry<"posts">[]> {
 	const allBlogPosts = await getCollection("posts", ({ data, slug }) => {
-		// Exclude drafts, unpublished (if publishAt is set), and the current post
-		const isNotDraft = import.meta.env.PROD ? data.draft !== true : true;
-		const isPublished = !import.meta.env.PROD || !data.publishAt || new Date(data.publishAt) <= new Date();
-		const isNotCurrentPost = slug !== currentPost.slug;
-		return isNotDraft && isPublished && isNotCurrentPost;
+		// Exclude drafts and the current post
+		return (
+			(import.meta.env.PROD ? data.draft !== true : true) &&
+			slug !== currentPost.slug
+		);
 	});
 
 	// Calculate similarity score based on common tags
@@ -203,9 +199,9 @@ export async function getRelatedPosts(
 			if (a.score !== b.score) {
 				return b.score - a.score;
 			}
-				// If scores are equal, sort by publication date (newest first), using publishAt if available
-			const dateA = new Date(a.post.data.publishAt || a.post.data.published);
-			const dateB = new Date(b.post.data.publishAt || b.post.data.published);
+			// If scores are equal, sort by publication date (newest first)
+			const dateA = new Date(a.post.data.published);
+			const dateB = new Date(b.post.data.published);
 			return dateA > dateB ? -1 : 1;
 		})
 		.slice(0, limit)
