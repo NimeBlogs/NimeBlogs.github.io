@@ -3,7 +3,6 @@ title: Second Featured Article
 description: This is a second featured article to test the carousel functionality.
 published: 2024-04-16
 tags:
-  - Featured
   - Test
 category: Examples
 featured: true

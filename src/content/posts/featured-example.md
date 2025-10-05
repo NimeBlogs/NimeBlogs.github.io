@@ -8,7 +8,7 @@ tags:
   - Example
   - Blogging
 category: Examples
-featured: true
+featured: false
 draft: true
 ---
 
