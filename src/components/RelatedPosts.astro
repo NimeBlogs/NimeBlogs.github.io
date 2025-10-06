@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
-import { getPostUrlBySlug, getDir } from "../utils/url-utils";
+import { getDir, getPostUrlBySlug } from "../utils/url-utils";
 import ImageWrapper from "./misc/ImageWrapper.astro";
 
 interface Props {
@@ -14,8 +14,8 @@ const { relatedPosts } = Astro.props;
 
 // 生成随机图片URL的函数
 const getRandomImageUrl = (width = 400, height = 225): string => {
-  // 生成真正随机的图片URL
-  return `https://picsum.photos/${width}/${height}?random=${Math.random()}`;
+	// 生成真正随机的图片URL
+	return `https://picsum.photos/${width}/${height}?random=${Math.random()}`;
 };
 ---
 

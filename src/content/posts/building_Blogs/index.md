@@ -12,6 +12,7 @@ draft: false
 image: ./cover.png
 featured: true
 series: 折腾电脑记
+pinned: true
 ---
 
 ### 关于 Fuwari

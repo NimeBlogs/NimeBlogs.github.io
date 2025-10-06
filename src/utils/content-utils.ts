@@ -10,6 +10,10 @@ async function getRawSortedPosts() {
 	});
 
 	const sorted = allBlogPosts.sort((a, b) => {
+	    // 首先按置顶状态排序
+	    if (a.data.pinned && !b.data.pinned) return -1;
+	    if (!a.data.pinned && b.data.pinned) return 1;
+	    // 然后按发布时间排序
 		const dateA = new Date(a.data.published);
 		const dateB = new Date(b.data.published);
 		return dateA > dateB ? -1 : 1;
@@ -51,22 +55,22 @@ export type Tag = {
 	count: number;
 };
 export async function getPostSeries(
-  seriesName: string,
+	seriesName: string,
 ): Promise<{ body: string; data: BlogPostData; slug: string }[]> {
-  const posts = (await getCollection('posts', ({ data }) => {
-    return (
-      (import.meta.env.PROD ? data.draft !== true : true) &&
-      data.series === seriesName
-    )
-  })) as unknown as { body: string; data: BlogPostData; slug: string }[]
+	const posts = (await getCollection("posts", ({ data }) => {
+		return (
+			(import.meta.env.PROD ? data.draft !== true : true) &&
+			data.series === seriesName
+		);
+	})) as unknown as { body: string; data: BlogPostData; slug: string }[];
 
-  posts.sort((a, b) => {
-    const dateA = new Date(a.data.published)
-    const dateB = new Date(b.data.published)
-    return dateA > dateB ? 1 : -1
-  })
+	posts.sort((a, b) => {
+		const dateA = new Date(a.data.published);
+		const dateB = new Date(b.data.published);
+		return dateA > dateB ? 1 : -1;
+	});
 
-  return posts
+	return posts;
 }
 
 export async function getTagList(): Promise<Tag[]> {

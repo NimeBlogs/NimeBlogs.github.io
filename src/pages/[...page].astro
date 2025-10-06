@@ -1,9 +1,8 @@
 ---
 import type { GetStaticPaths } from "astro";
 import Pagination from "../components/control/Pagination.astro";
-import DailyHoroscope from "../components/widget/DailyHoroscope.astro";
-import FeaturedPostsCarousel from "../components/FeaturedPostsCarousel.astro";
 import PostPage from "../components/PostPage.astro";
+import DailyHoroscope from "../components/widget/DailyHoroscope.astro";
 import { PAGE_SIZE } from "../constants/constants";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
@@ -20,8 +19,8 @@ const len = page.data.length;
 ---
 
 <MainGridLayout>
-    <DailyHoroscope class="onload-animation mb-6" style="animation-delay: calc(var(--content-delay) + 50ms)"></DailyHoroscope>
-    <FeaturedPostsCarousel class="onload-animation" style="animation-delay: calc(var(--content-delay) + 100ms)"></FeaturedPostsCarousel>
+    <DailyHoroscope class="onload-animation" style="animation-delay: calc(var(--content-delay) + 50ms)"></DailyHoroscope>
+    <div class="h-16"></div>
     <PostPage page={page}></PostPage>
     <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
 </MainGridLayout>

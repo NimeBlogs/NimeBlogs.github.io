@@ -108,17 +108,24 @@ const bannerOffset =
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
 		<script is:inline define:vars={{PAGE_WIDTH, configHue, BANNER_HEIGHT_EXTEND}}>
-			// Force light mode
-			document.documentElement.classList.remove('dark');
-
-			// Load the hue from local storage
-			const hue = localStorage.getItem('hue') || configHue;
-			document.documentElement.style.setProperty('--hue', hue);
-
-			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
-			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
-			offset = offset - offset % 4;
-			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+		    // 加载存储的主题而不是强制使用浅色模式
+		    const storedTheme = localStorage.getItem('theme');
+		    if (storedTheme === 'dark') {
+		        document.documentElement.classList.add('dark');
+		    } else if (storedTheme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		        document.documentElement.classList.add('dark');
+		    } else {
+		        document.documentElement.classList.remove('dark');
+		    }
+		
+		    // Load the hue from local storage
+		    const hue = localStorage.getItem('hue') || configHue;
+		    document.documentElement.style.setProperty('--hue', hue);
+		
+		    // calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
+		    let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
+		    offset = offset - offset % 4;
+		    document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
 		</script>
 		<style define:vars={{
 			configHue,

@@ -2,7 +2,7 @@
 
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
-import Comment from "@components/comment/index.astro";
+import GiscusComment from "../components/Giscus.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -48,10 +48,21 @@ const items = [
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
-
-            <Comment post={i18n(I18nKey.friends)}></Comment>
+            <GiscusComment
+              repo="NimeBlogs/NimeBlogs-comments"
+              repoId="R_kgDOP8AHNw"
+              category="General"
+              categoryId="DIC_kwDOP8AHN84CwOpJ"
+              mapping="pathname"
+              reactionsEnabled="1"
+              emitMetadata="0"
+              inputPosition="top"
+              lang="zh-CN"
+            />
         </div>
     </div>
+
+    
 
 <!--在此处👇插入随机排列JS脚本 -->
 <script>

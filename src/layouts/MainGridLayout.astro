@@ -6,8 +6,8 @@ import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
-import TOC from "../components/widget/TOC.astro";
 import ReadingProgress from "../components/ReadingProgress.svelte";
+import TOC from "../components/widget/TOC.astro";
 import { siteConfig } from "../config";
 import {
 	BANNER_HEIGHT,
@@ -23,8 +23,8 @@ interface Props {
 	lang?: string;
 	setOGTypeArticle?: boolean;
 	headings?: MarkdownHeading[];
-    series?: string;
-    currentPostTitle?: string;
+	series?: string;
+	currentPostTitle?: string;
 }
 
 const {
@@ -34,8 +34,8 @@ const {
 	lang,
 	setOGTypeArticle,
 	headings = [],
-    series,
-    currentPostTitle,
+	series,
+	currentPostTitle,
 } = Astro.props;
 const hasBannerCredit =
 	siteConfig.banner.enable && siteConfig.banner.credit.enable;

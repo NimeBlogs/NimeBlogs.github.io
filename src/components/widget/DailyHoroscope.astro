@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<div class="horoscope-container card-base rounded-[var(--radius-large)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-md w-full transition-all duration-300 hover:shadow-lg">
+<div class="horoscope-container card-base rounded-[var(--radius-large)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:border-gray-900 shadow-md w-full transition-all duration-300 hover:shadow-lg">
   <div class="p-5">
     <h3 class="text-xl font-bold text-90 dark:text-white mb-4 flex items-center">
       <Icon class="mr-2 text-[var(--primary)]" name="material-symbols:stars" size={24} />
@@ -488,16 +488,16 @@ import { Icon } from "astro-icon/components";
     <div class="mb-4">
       <!-- 总运势评分 -->
       <div class="flex items-center mb-3">
-        <span class="text-sm text-70 dark:text-30 mr-2">总评分:</span>
+        <span class="text-sm text-70 dark:text-white mr-2">总评分:</span>
         <div class="flex items-center">
           <div class="stars-container"></div>
-          <span class="ml-2 text-sm font-medium text-80 dark:text-20 luck-score"></span>
+          <span class="ml-2 text-sm font-medium text-80 dark:text-white luck-score"></span>
         </div>
       </div>
       
       <!-- 运势详细描述 -->
       <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 rounded-lg p-4 mb-4">
-        <p class="text-sm text-75 dark:text-30 leading-relaxed luck-description"></p>
+        <p class="text-sm text-75 dark:text-gray-400 leading-relaxed luck-description"></p>
       </div>
       
       <!-- 分类运势评分 -->
@@ -507,14 +507,14 @@ import { Icon } from "astro-icon/components";
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center">
               <Icon name="material-symbols:tag-rounded" size="16" class="mr-2 text-green-600 dark:text-green-400" />
-              <span class="text-sm font-medium text-80 dark:text-20">财运</span>
+              <span class="text-sm font-medium text-80 dark:text-gray-400">财运</span>
             </div>
             <div class="flex items-center">
               <div class="wealth-stars-container"></div>
-              <span class="ml-1 text-xs text-70 dark:text-30 wealth-score"></span>
+              <span class="ml-1 text-xs text-70 dark:text-gray-400 wealth-score"></span>
             </div>
           </div>
-          <p class="text-xs text-60 dark:text-40 mt-1 wealth-description"></p>
+          <p class="text-xs text-60 dark:text-gray-400 mt-1 wealth-description"></p>
         </div>
         
         <!-- 事业 -->
@@ -522,14 +522,14 @@ import { Icon } from "astro-icon/components";
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center">
               <Icon name="material-symbols:book-2-outline-rounded" size="16" class="mr-2 text-purple-600 dark:text-purple-400" />
-              <span class="text-sm font-medium text-80 dark:text-20">事业</span>
+              <span class="text-sm font-medium text-80 dark:text-gray-400">事业</span>
             </div>
             <div class="flex items-center">
               <div class="career-stars-container"></div>
-              <span class="ml-1 text-xs text-70 dark:text-30 career-score"></span>
+              <span class="ml-1 text-xs text-70 dark:text-gray-400 career-score"></span>
             </div>
           </div>
-          <p class="text-xs text-60 dark:text-40 mt-1 career-description"></p>
+          <p class="text-xs text-60 dark:text-gray-400 mt-1 career-description"></p>
         </div>
         
         <!-- 健康 -->
@@ -537,14 +537,14 @@ import { Icon } from "astro-icon/components";
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center">
               <Icon name="material-symbols:calendar-today-outline-rounded" size="16" class="mr-2 text-red-600 dark:text-red-400" />
-              <span class="text-sm font-medium text-80 dark:text-20">健康</span>
+              <span class="text-sm font-medium text-80 dark:text-gray-400">健康</span>
             </div>
             <div class="flex items-center">
               <div class="health-stars-container"></div>
-              <span class="ml-1 text-xs text-70 dark:text-30 health-score"></span>
+              <span class="ml-1 text-xs text-70 dark:text-gray-400 health-score"></span>
             </div>
           </div>
-          <p class="text-xs text-60 dark:text-40 mt-1 health-description"></p>
+          <p class="text-xs text-60 dark:text-gray-400 mt-1 health-description"></p>
         </div>
         
         <!-- 感情运 -->
@@ -552,52 +552,52 @@ import { Icon } from "astro-icon/components";
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center">
               <Icon name="material-symbols:star" size="16" class="mr-2 text-pink-600 dark:text-pink-400" />
-              <span class="text-sm font-medium text-80 dark:text-20">感情运</span>
+              <span class="text-sm font-medium text-80 dark:text-gray-400">感情运</span>
             </div>
             <div class="flex items-center">
               <div class="love-stars-container"></div>
-              <span class="ml-1 text-xs text-70 dark:text-30 love-score"></span>
+              <span class="ml-1 text-xs text-70 dark:text-gray-400 love-score"></span>
             </div>
           </div>
-          <p class="text-xs text-60 dark:text-40 mt-1 love-description"></p>
+          <p class="text-xs text-60 dark:text-gray-400 mt-1 love-description"></p>
         </div>
       </div>
       
       <!-- 幸运元素 -->
       <div class="grid grid-cols-2 gap-3 mb-4">
         <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 transition-all hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-100 dark:border-gray-700">
-          <div class="text-xs text-60 dark:text-40 mb-1 flex items-center">
+          <div class="text-xs text-60 dark:text-gray-400 mb-1 flex items-center">
             <Icon name="material-symbols:palette-outline" size="12" class="mr-1" />
             幸运颜色
           </div>
           <div class="flex items-center">
             <span class="inline-block w-4 h-4 rounded-full mr-2 color-dot"></span>
-            <span class="text-sm font-medium text-80 dark:text-20 lucky-color"></span>
+            <span class="text-sm font-medium text-80 dark:text-gray-400 lucky-color"></span>
           </div>
         </div>
         
         <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 transition-all hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-100 dark:border-gray-700">
-          <div class="text-xs text-60 dark:text-40 mb-1 flex items-center">
+          <div class="text-xs text-60 dark:text-gray-400 mb-1 flex items-center">
             <Icon name="material-symbols:edit-calendar-outline-rounded" size="12" class="mr-1" />
             幸运数字
           </div>
-          <div class="text-sm font-medium text-80 dark:text-20 lucky-number"></div>
+          <div class="text-sm font-medium text-80 dark:text-gray-400 lucky-number"></div>
         </div>
       </div>
       
       <!-- 今日建议 -->
       <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800/30 rounded-lg p-3 mb-4">
-        <div class="text-xs text-60 dark:text-40 mb-1 flex items-center">
+        <div class="text-xs text-60 dark:text-gray-400 mb-1 flex items-center">
             <Icon name="material-symbols:star" size="12" class="mr-1 text-yellow-500 dark:text-yellow-400" />
             今日建议
           </div>
-        <p class="text-sm text-75 dark:text-30 daily-advice"></p>
+        <p class="text-sm text-75 dark:text-gray-400 daily-advice"></p>
       </div>
     </div>
     
     <div class="flex flex-col space-y-3">
       <div class="text-center mb-2">
-        <span class="update-date text-lg font-semibold text-80 dark:text-20"></span>
+        <span class="update-date text-lg font-semibold text-80 dark:text-gray-400"></span>
       </div>
       <div class="flex justify-center">
         <a href="/horoscope/" class="text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors flex items-center">

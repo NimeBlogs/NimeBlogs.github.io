@@ -46,7 +46,7 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Series,
 		LinkPreset.Friends,
 		LinkPreset.Message,
-		LinkPreset.List,
+		// LinkPreset.List,
 		LinkPreset.About,
 		{
 			name: "洛谷",
@@ -88,6 +88,6 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 
 export const commentConfig: CommentConfig = {
 	twikoo: {
-		envId: 'https://kerwen.netlify.app/.netlify/functions/twikoo',
+		envId: "https://kerwen.netlify.app/.netlify/functions/twikoo",
 	},
-}
+};

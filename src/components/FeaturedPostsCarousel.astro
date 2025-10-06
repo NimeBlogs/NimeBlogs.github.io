@@ -28,7 +28,7 @@ const featuredPosts = await getFeaturedPosts(limit, featuredTag);
       </h2>
       <div class="hidden md:flex items-center gap-2 text-sm text-70 dark:text-30">
         <span>{featuredPosts.length} {featuredPosts.length === 1 ? i18n(I18nKey.post) : i18n(I18nKey.posts)}</span>
-        <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></span>
+        <span class="w-1 h-1 rounded-full bg-gray-300 dark:border-gray-800"></span>
         <span class="italic">Featured</span>
       </div>
     </div>
@@ -48,7 +48,7 @@ const featuredPosts = await getFeaturedPosts(limit, featuredTag);
             key={post.slug} 
             class="relative group transition-all duration-500 hover:shadow-xl hover:-translate-y-1 min-w-[300px] sm:min-w-[500px] md:min-w-[650px] max-w-full snap-start"
           >
-            <div class="card-base flex flex-col md:flex-row h-full rounded-[var(--radius-large)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-md hover:shadow-xl transition-all duration-300">
+            <div class="card-base flex flex-col md:flex-row h-full rounded-[var(--radius-large)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:border-gray-900 shadow-md hover:shadow-xl transition-all duration-300">
               <!-- Text content (left side) -->
               <div class="p-5 md:p-6 flex-grow flex flex-col w-full md:w-1/2">
                 <a href={`/posts/${post.slug}/`} class="font-bold text-xl sm:text-2xl mb-3 line-clamp-2 group text-90 dark:text-white hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors">
@@ -69,7 +69,7 @@ const featuredPosts = await getFeaturedPosts(limit, featuredTag);
                   {post.data.description || ""}
                 </p>
                 
-                <a href={`/posts/${post.slug}/`} class="inline-flex items-center text-sm font-medium text-[var(--primary)] hover:text-[var(--primary-hover)] dark:text-[var(--primary)] dark:hover:text-[var(--primary-hover)] transition-all duration-300 py-2.5 px-5 rounded-full bg-[var(--primary)]/5 dark:bg-[var(--primary)]/10 hover:bg-[var(--primary)]/10 dark:hover:bg-[var(--primary)]/20 hover:shadow-md transform hover:-translate-y-0.5 self-start">
+                <a href={`/posts/${post.slug}/`} class="inline-flex items-center text-sm font-medium text-[var(--primary)] hover:text-[var(--primary-hover)] dark:text-[var(--primary)] dark:hover:text-[var(--primary-hover)] transition-all duration-300 py-2.5 px-5 rounded-full bg-[var(--primary)]/5 dark:border-[var(--primary)]/10 hover:bg-[var(--primary)]/10 dark:hover:bg-[var(--primary)]/20 hover:shadow-md transform hover:-translate-y-0.5 self-start">
                   {i18n(I18nKey.readMore)}
                   <Icon name="material-symbols:chevron-right" class="ml-1.5 transition-transform group-hover:translate-x-0.5" size={16} />
                 </a>
@@ -101,10 +101,10 @@ const featuredPosts = await getFeaturedPosts(limit, featuredTag);
       
       <!-- Scroll indicators -->
       <div class="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none px-2 md:px-4">
-        <button id="scrollLeft" class="scroll-indicator-left h-12 w-12 rounded-full bg-white/80 dark:bg-gray-800/80 flex items-center justify-center shadow-md pointer-events-auto transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900">
+        <button id="scrollLeft" class="scroll-indicator-left h-12 w-12 rounded-full bg-white/80 dark:border-gray-800/80 flex items-center justify-center shadow-md pointer-events-auto transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900">
           <Icon name="material-symbols:chevron-left" class="text-[var(--primary)] dark:text-[var(--primary)]" size={24} />
         </button>
-        <button id="scrollRight" class="scroll-indicator-right h-12 w-12 rounded-full bg-white/80 dark:bg-gray-800/80 flex items-center justify-center shadow-md pointer-events-auto transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900 hover:scale-110">
+        <button id="scrollRight" class="scroll-indicator-right h-12 w-12 rounded-full bg-white/80 dark:border-gray-800/80 flex items-center justify-center shadow-md pointer-events-auto transition-all duration-300 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 dark:focus:ring-offset-gray-900 hover:scale-110">
           <Icon name="material-symbols:chevron-right" class="text-[var(--primary)] dark:text-[var(--primary)]" size={24} />
         </button>
       </div>

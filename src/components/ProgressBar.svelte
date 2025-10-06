@@ -1,43 +1,44 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
-  
-  // 监听滚动事件，更新阅读进度
-  let progress = 0;
-  let showProgressBar = false; // 控制进度条的显示/隐藏
-  let progressBarOpacity = 0; // 控制进度条的透明度动画
-  
-  const updateProgress = () => {
-    // 获取文档总高度和可视区域高度
-    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-    // 获取当前滚动位置
-    const progressHeight = window.scrollY;
-    // 计算进度百分比
-    progress = (progressHeight / totalHeight) * 100;
-    
-    // 控制进度条的显示/隐藏：当滚动超过100px时显示，否则隐藏
-    if (progressHeight > 100 && totalHeight > 0) {
-      showProgressBar = true;
-      setTimeout(() => {
-        progressBarOpacity = 1;
-      }, 50);
-    } else {
-      progressBarOpacity = 0;
-      setTimeout(() => {
-        if (progressBarOpacity === 0) {
-          showProgressBar = false;
-        }
-      }, 300);
-    }
-  };
-  
-  // 组件挂载时添加事件监听
-  onMount(() => {
-    window.addEventListener('scroll', updateProgress);
-    // 初始更新一次进度
-    updateProgress();
-    // 组件销毁时移除事件监听
-    return () => window.removeEventListener('scroll', updateProgress);
-  });
+import { onDestroy, onMount } from "svelte";
+
+// 监听滚动事件，更新阅读进度
+let progress = 0;
+let showProgressBar = false; // 控制进度条的显示/隐藏
+let progressBarOpacity = 0; // 控制进度条的透明度动画
+
+const updateProgress = () => {
+	// 获取文档总高度和可视区域高度
+	const totalHeight =
+		document.documentElement.scrollHeight - window.innerHeight;
+	// 获取当前滚动位置
+	const progressHeight = window.scrollY;
+	// 计算进度百分比
+	progress = (progressHeight / totalHeight) * 100;
+
+	// 控制进度条的显示/隐藏：当滚动超过100px时显示，否则隐藏
+	if (progressHeight > 100 && totalHeight > 0) {
+		showProgressBar = true;
+		setTimeout(() => {
+			progressBarOpacity = 1;
+		}, 50);
+	} else {
+		progressBarOpacity = 0;
+		setTimeout(() => {
+			if (progressBarOpacity === 0) {
+				showProgressBar = false;
+			}
+		}, 300);
+	}
+};
+
+// 组件挂载时添加事件监听
+onMount(() => {
+	window.addEventListener("scroll", updateProgress);
+	// 初始更新一次进度
+	updateProgress();
+	// 组件销毁时移除事件监听
+	return () => window.removeEventListener("scroll", updateProgress);
+});
 </script>
 
 {#if showProgressBar}

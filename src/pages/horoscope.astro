@@ -1129,13 +1129,13 @@ const unfavorableActivities = generateDailyActivities(
 <MainGridLayout title={title} description={description}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full ">
-            <h1 class="text-center text-3xl md:text-4xl font-bold mb-6">{year}年{month}月{day}日 每日运势详情</h1>
+            <h1 class="text-center text-3xl md:text-4xl font-bold mb-6 dark:text-gray-100">{year}年{month}月{day}日 每日运势详情</h1>
     
     <!-- 整体运势概览 -->
     <div class="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-6 mb-8 shadow-md">
       <div class="flex flex-col md:flex-row items-center justify-between">
         <div class="mb-4 md:mb-0">
-          <h2 class="text-2xl font-bold mb-2">整体运势</h2>
+          <h2 class="text-2xl font-bold mb-2 dark:text-gray-100">整体运势</h2>
           <div class="flex items-center">
             <div id="luck-stars-container" class="flex">
               {Array.from({ length: luckStarRating }).map((_, i) => (
@@ -1159,7 +1159,7 @@ const unfavorableActivities = generateDailyActivities(
         <div class="text-center md:text-right">
           <div class="flex items-center justify-center md:justify-end">
             <div class="w-4 h-4 rounded-full mr-2" style="background-color: {getColorValue(luckyColor)}"></div>
-            <p class="text-lg mb-2">{luckyColor}</p>
+            <p class="text-lg mb-2 dark:text-gray-100">{luckyColor}</p>
           </div>
           <p class="text-lg font-bold text-yellow-500">{luckyNumber}</p>
           <div class="text-sm text-gray-600 dark:text-gray-400">幸运颜色 / 幸运数字</div>
@@ -1170,7 +1170,7 @@ const unfavorableActivities = generateDailyActivities(
 
     <!-- 今日宜忌 -->
     <div class="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-xl p-6 mb-8 shadow-md">
-      <h2 class="text-2xl font-bold mb-4">今日宜忌</h2>
+      <h2 class="text-2xl font-bold mb-4 dark:text-gray-100">今日宜忌</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg p-4">
           <h3 class="flex items-center text-xl font-semibold text-green-600 dark:text-green-400 mb-3">
@@ -1218,7 +1218,7 @@ const unfavorableActivities = generateDailyActivities(
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <!-- 二次元爱好者运势 -->
       <div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <path d="m9.09 9 1.67-2 1.66 2 7.31.62"></path>
@@ -1257,7 +1257,7 @@ const unfavorableActivities = generateDailyActivities(
                     <path d="m5 12 5 5L20 7"/>
                   </svg>
                 </span>
-                <span class="text-gray-600 dark:text-gray-300 text-sm">{advice}</span>
+                <span class="text-gray-600 dark:text-gray-200 text-sm">{advice}</span>
               </li>
             ))}
           </ul>
@@ -1266,7 +1266,7 @@ const unfavorableActivities = generateDailyActivities(
 
       <!-- 游戏玩家运势 -->
       <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="12" height="12" x="6" y="6" rx="2" ry="2"></rect>
             <path d="M15 3v3"></path>
@@ -1319,7 +1319,7 @@ const unfavorableActivities = generateDailyActivities(
 
       <!-- 阅读爱好者运势 -->
       <div class="bg-gradient-to-r from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
           </svg>
@@ -1364,7 +1364,7 @@ const unfavorableActivities = generateDailyActivities(
 
       <!-- 运动健身爱好者运势 -->
       <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
           </svg>
@@ -1409,7 +1409,7 @@ const unfavorableActivities = generateDailyActivities(
 
       <!-- 摄影爱好者运势 -->
       <div class="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
             <circle cx="12" cy="13" r="3"></circle>
@@ -1456,7 +1456,7 @@ const unfavorableActivities = generateDailyActivities(
 
       <!-- 音乐爱好者运势 -->
       <div class="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.25 12.79c0 4-4.25 6.5-9.75 6.5s-9.75-2.5-9.75-6.5 4.25-6.5 9.75-6.5 9.75 2.5 9.75 6.5Z"></path>
             <path d="m9.75 15 4.5-6"></path>
@@ -1501,8 +1501,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 旅行爱好者运势 -->
-      <div class="bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-900/20 dark:to-teal-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-900/40 dark:to-teal-900/40 rounded-xl p-5 shadow-md border border-cyan-100 dark:border-cyan-800/30">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 12c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"></path>
             <path d="M2 12h2v-1h2v1h2v1h-2v1H4v-1H2z"></path>
@@ -1532,7 +1532,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(travelerScore)}`}>{travelerScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{travelerDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{travelerDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-cyan-700 dark:text-cyan-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1551,8 +1551,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 美食爱好者运势 -->
-      <div class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-rose-900/20 dark:to-red-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-rose-50 to-red-50 dark:from-rose-900/40 dark:to-red-900/40 rounded-xl p-5 shadow-md border border-rose-100 dark:border-rose-800/30">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2c-3.2 0-6 2.4-7 6-1 3.6 2 6.7 6 9.9 4 3.2 7.5 5.6 7.5 5.6s1.3-1 2.8-3.2c1.5-2.2 1.5-5.1.8-8.3-.7-3.3-3.8-6-7.3-6Z"></path>
           </svg>
@@ -1577,7 +1577,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(foodieScore)}`}>{foodieScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{foodieDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{foodieDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-rose-700 dark:text-rose-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1596,8 +1596,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 韩娱爱好者运势 -->
-      <div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/40 dark:to-rose-900/40 rounded-xl p-5 shadow-md border border-pink-100 dark:border-pink-800/30">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 16c1.66 0 3-1.34 3-3S13.66 10 12 10s-3 1.34-3 3 1.34 3 3 3z"></path>
             <path d="M2 12h2v-1h2v1h2v1h-2v1H4v-1H2z"></path>
@@ -1627,7 +1627,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(kpopScore)}`}>{kpopScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{kpopDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{kpopDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-pink-700 dark:text-pink-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1646,8 +1646,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 内娱爱好者运势 -->
-      <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/40 dark:to-orange-900/40 rounded-xl p-5 shadow-md border border-red-100 dark:border-red-800/30">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"></path>
             <path d="m2 12 10 5 10-5"></path>
@@ -1674,7 +1674,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(cpopScore)}`}>{cpopScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{cpopDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{cpopDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-red-700 dark:text-red-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1693,8 +1693,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- OIer运势 -->
-      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl p-5 shadow-md dark:shadow-lg dark:shadow-blue-900/10 transition-all duration-300 hover:shadow-lg hover:scale-[1.01] dark:hover:shadow-blue-800/20">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 3v18h-6"></path>
             <path d="M12 9 8 9 8 15 12 15"></path>
@@ -1721,7 +1721,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(oierScore)}`}>{oierScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{oierDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{oierDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1740,8 +1740,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 我的世界爱好者运势 -->
-      <div class="bg-gradient-to-r from-green-50 to-lime-50 dark:from-green-900/20 dark:to-lime-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-green-50 to-lime-50 dark:from-green-900/30 dark:to-lime-900/30 rounded-xl p-5 shadow-md dark:shadow-lg dark:shadow-green-900/10 transition-all duration-300 hover:shadow-lg hover:scale-[1.01] dark:hover:shadow-green-800/20">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="12" height="12" x="6" y="6" rx="2" ry="2"></rect>
             <path d="M12 3v3"></path>
@@ -1770,7 +1770,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(minecraftScore)}`}>{minecraftScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{minecraftDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{minecraftDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-green-700 dark:text-green-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1789,8 +1789,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 王者荣耀爱好者运势 -->
-      <div class="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/30 dark:to-amber-900/30 rounded-xl p-5 shadow-md dark:shadow-lg dark:shadow-yellow-900/10 transition-all duration-300 hover:shadow-lg hover:scale-[1.01] dark:hover:shadow-yellow-800/20">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
             <path d="M14 2v6h6"></path>
@@ -1818,7 +1818,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(honorScore)}`}>{honorScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{honorDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{honorDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-yellow-700 dark:text-yellow-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1837,8 +1837,8 @@ const unfavorableActivities = generateDailyActivities(
       </div>
 
       <!-- 磕CP爱好者运势 -->
-      <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-5 shadow-md">
-        <h3 class="text-xl font-bold mb-3 flex items-center">
+      <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-5 shadow-md dark:shadow-lg dark:shadow-purple-900/10 transition-all duration-300 hover:shadow-lg hover:scale-[1.01] dark:hover:shadow-purple-800/20">
+        <h3 class="text-xl font-bold mb-3 flex items-center dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
             <path d="m16 8 4 4"></path>
@@ -1867,7 +1867,7 @@ const unfavorableActivities = generateDailyActivities(
           </div>
           <span class={`ml-2 font-medium ${getColorByScore(shippingScore)}`}>{shippingScore.toFixed(1)}/10</span>
         </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">{shippingDescription}</p>
+        <p class="text-gray-700 dark:text-gray-100 font-medium mb-4">{shippingDescription}</p>
         <div class="mt-4">
           <h4 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-2">今日建议</h4>
           <ul class="space-y-2">
@@ -1887,7 +1887,7 @@ const unfavorableActivities = generateDailyActivities(
     </div>
 
         <!-- 学生党运势专栏 -->
-      <div class="bg-gradient-to-r from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20 rounded-xl p-5 shadow-md border-l-4 border-blue-500 relative overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div class="bg-gradient-to-r from-blue-50 to-sky-50 dark:from-blue-900/30 dark:to-sky-900/30 rounded-xl p-5 shadow-md dark:shadow-lg dark:shadow-blue-900/10 border-l-4 border-blue-500 relative overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-blue-800/20">
         <!-- 装饰元素 -->
         <div class="absolute top-0 right-0 w-32 h-32 opacity-10 transform rotate-12">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1897,7 +1897,7 @@ const unfavorableActivities = generateDailyActivities(
           </svg>
         </div>
         
-        <h3 class="text-xl font-bold mb-3 flex items-center text-blue-800 dark:text-blue-300">
+        <h3 class="text-xl font-bold mb-3 flex items-center text-blue-800 dark:text-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
@@ -1934,7 +1934,7 @@ const unfavorableActivities = generateDailyActivities(
         </div>
         
         <div class="bg-white/70 dark:bg-gray-800/50 rounded-lg p-4 mb-4 shadow-sm border border-blue-100/50 dark:border-blue-900/30 transform transition-all duration-300 hover:shadow-md">
-          <p class="text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
+          <p class="text-gray-700 dark:text-gray-100 font-medium leading-relaxed">
             {studentDescription}
           </p>
         </div>
@@ -1957,7 +1957,7 @@ const unfavorableActivities = generateDailyActivities(
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{homeworkScore.toFixed(1)}/10</span>
           </div>
-          <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
+          <p class="text-gray-600 dark:text-gray-200 text-sm mt-1 font-medium">
             <span class="inline-flex items-center justify-center w-5 h-5 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full mr-2 text-xs font-bold">
               {homeworkScore > 7 ? '!' : homeworkScore > 4 ? '~' : '✓'}
             </span>
@@ -1982,7 +1982,7 @@ const unfavorableActivities = generateDailyActivities(
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{teacherScore.toFixed(1)}/10</span>
           </div>
-          <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
+          <p class="text-gray-600 dark:text-gray-200 text-sm mt-1 font-medium">
             <span class="inline-flex items-center justify-center w-5 h-5 bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 rounded-full mr-2 text-xs font-bold">
               {teacherScore > 7 ? '😊' : teacherScore > 4 ? '😐' : '😒'}
             </span>
@@ -2005,7 +2005,7 @@ const unfavorableActivities = generateDailyActivities(
             </div>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{gossipScore.toFixed(1)}/10</span>
           </div>
-          <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
+          <p class="text-gray-600 dark:text-gray-200 text-sm mt-1 font-medium">
             <span class="inline-flex items-center justify-center w-5 h-5 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-full mr-2 text-xs font-bold">
               {gossipScore > 7 ? '🔥' : gossipScore > 4 ? '🤫' : '💤'}
             </span>
@@ -2028,7 +2028,7 @@ const unfavorableActivities = generateDailyActivities(
                 <span class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full mr-2 mt-0.5 flex-shrink-0 font-bold">
                   {index + 1}
                 </span>
-                <span class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{advice}</span>
+                <span class="text-gray-600 dark:text-gray-200 text-sm leading-relaxed font-medium">{advice}</span>
               </li>
             ))}
           </ul>
@@ -2037,14 +2037,14 @@ const unfavorableActivities = generateDailyActivities(
 
     <!-- 重要事件预测 -->
     <div class="bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-900/20 dark:to-indigo-900/20 rounded-xl p-6 mb-8 mt-8 shadow-md">
-      <h3 class="text-xl font-bold mb-3">重要事件预测</h3>
+      <h3 class="text-xl font-bold mb-3 dark:text-gray-100">重要事件预测</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         {eventPredictions.map((prediction, index) => (
           <div key={`event-${index}`} class="bg-white/50 dark:bg-gray-800/50 rounded-lg p-4 hover:shadow-md transition-shadow duration-300">
             <div class="flex items-center mb-2">
               <span class="px-3 py-1 bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200 rounded-full text-sm font-medium">{prediction.type}</span>
             </div>
-            <p class="text-gray-700 dark:text-gray-300 text-sm">{prediction.description}</p>
+            <p class="text-gray-700 dark:text-gray-200 text-sm font-medium">{prediction.description}</p>
           </div>
         ))}
       </div>
@@ -2052,16 +2052,16 @@ const unfavorableActivities = generateDailyActivities(
 
     <!-- 今日建议 -->
     <div class="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl p-6 shadow-md">
-      <h3 class="text-xl font-bold mb-3">今日建议</h3>
+      <h3 class="text-xl font-bold mb-3 dark:text-gray-100">今日建议</h3>
       <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg p-4">
-        <p class="text-gray-700 dark:text-gray-300 italic">"{advice}"</p>
+        <p class="text-gray-700 dark:text-gray-100 italic font-medium">"{advice}"</p>
       </div>
     </div>
     
     <!-- 免责声明 -->
     <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
       <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">免责声明</h3>
-      <p class="text-sm text-gray-600 dark:text-gray-400">
+      <p class="text-sm text-gray-600 dark:text-gray-300">
         本页面提供的运势预测仅供娱乐参考，不构成任何形式的专业建议或指导。
         生活中的决策应当基于理性思考和实际情况，而非依赖此类娱乐性内容。
         祝您好运常伴！

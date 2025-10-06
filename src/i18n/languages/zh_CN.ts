@@ -8,6 +8,7 @@ export const zh_CN: Translation = {
 	[Key.search]: "搜索",
 	[Key.friends]: "友链",
 	[Key.list]: "列表",
+	[Key.unfind]: "404 Not Found",
 
 	[Key.tags]: "标签",
 	[Key.categories]: "分类",

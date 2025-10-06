@@ -15,7 +15,14 @@ interface Props {
 import { Image } from "astro:assets";
 import { url } from "../../utils/url-utils";
 
-const { id, src, alt, position = "center", basePath = "/", contentPath } = Astro.props;
+const {
+	id,
+	src,
+	alt,
+	position = "center",
+	basePath = "/",
+	contentPath,
+} = Astro.props;
 const className = Astro.props.class;
 
 // 判断是否为相对路径的本地图片（不以/、http、https、data:开头）
@@ -27,8 +34,8 @@ const isRelativeLocal = !(
 );
 
 // 判断是否为绝对路径的本地图片（以/开头）
-const isAbsoluteLocal = src.startsWith("/") && 
-	!(src.startsWith("http") || src.startsWith("https"));
+const isAbsoluteLocal =
+	src.startsWith("/") && !(src.startsWith("http") || src.startsWith("https"));
 
 const isLocal = isRelativeLocal || isAbsoluteLocal;
 const isPublic = src.startsWith("/");
@@ -43,42 +50,55 @@ if (isLocal) {
 		let found = false;
 		let normalizedPath;
 		let file;
-		
+
 		// 策略1: 首先尝试直接从content目录加载（与md文档同目录）
 		if (contentPath) {
 			console.log(`Debug: Content path received: ${contentPath}`);
-			
+
 			// 确保contentPath是完整路径格式
 			let fullContentPath = contentPath;
 			// 如果contentPath不包含'src/content'，则添加完整路径前缀
-			if (!contentPath.includes('src/content')) {
+			if (!contentPath.includes("src/content")) {
 				fullContentPath = `src/content/posts/${contentPath}`;
 			}
-			
+
 			const contentDir = path.dirname(fullContentPath);
 			console.log(`Debug: Content directory: ${contentDir}`);
-			
+
 			// 构建正确的相对路径 - 从组件位置到内容目录
 			normalizedPath = path
 				.normalize(path.join("../../", contentDir, src))
 				.replace(/\\/g, "/");
-			
+
 			// 尝试多种路径格式确保找到图片
 			const possiblePaths = [
 				normalizedPath,
 				// 尝试直接从src/content开始的路径
-				path.normalize(path.join("../../", fullContentPath, '..', src)).replace(/\\/g, "/"),
+				path
+					.normalize(path.join("../../", fullContentPath, "..", src))
+					.replace(/\\/g, "/"),
 				// 尝试从posts目录开始的路径
-				path.normalize(path.join("../../src/content/posts", path.basename(contentDir), src)).replace(/\\/g, "/")
+				path
+					.normalize(
+						path.join(
+							"../../src/content/posts",
+							path.basename(contentDir),
+							src,
+						),
+					)
+					.replace(/\\/g, "/"),
 			];
-			
-			const contentFiles = import.meta.glob<ImageMetadata>("../../src/content/**/*.*", {
-				import: "default",
-			});
-			
+
+			const contentFiles = import.meta.glob<ImageMetadata>(
+				"../../src/content/**/*.*",
+				{
+					import: "default",
+				},
+			);
+
 			console.log(`Debug: Looking for image '${src}' in possible paths:`);
 			possiblePaths.forEach((path) => console.log(`- Trying: ${path}`));
-			
+
 			// 遍历所有可能的路径，找到第一个存在的
 			for (const path of possiblePaths) {
 				if (contentFiles[path]) {
@@ -87,20 +107,24 @@ if (isLocal) {
 					break;
 				}
 			}
-			
+
 			if (file) {
 				try {
 					img = await file();
 					found = true;
 				} catch (error) {
-					console.warn(`Failed to load image from content path: ${normalizedPath}`, error);
+					console.warn(
+						`Failed to load image from content path: ${normalizedPath}`,
+						error,
+					);
 				}
 			} else {
-				console.error(`Debug: Could not find image '${src}' in any of the possible paths.`);
+				console.error(
+					`Debug: Could not find image '${src}' in any of the possible paths.`,
+				);
 			}
-			
 		}
-		
+
 		// 策略2: 如果策略1失败，使用原来的basePath路径
 		if (!found) {
 			const files = import.meta.glob<ImageMetadata>("../../**", {
@@ -110,7 +134,7 @@ if (isLocal) {
 				.normalize(path.join("../../", basePath, src))
 				.replace(/\\/g, "/");
 			file = files[normalizedPath];
-			
+
 			if (!file) {
 				console.error(
 					`\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
@@ -129,7 +153,10 @@ if (isLocal) {
 			// 设置img为true表示可以安全使用该路径
 			img = true;
 		} catch (error) {
-			console.error(`\n[ERROR] Failed to load absolute path image: ${src}`, error);
+			console.error(
+				`\n[ERROR] Failed to load absolute path image: ${src}`,
+				error,
+			);
 			img = undefined;
 		}
 	}

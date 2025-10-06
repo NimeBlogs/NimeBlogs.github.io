@@ -23,10 +23,11 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
+import fuwariLinkCard from "./src/plugins/fuwari-link-card.ts";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://fuwari.vercel.app/",
+	site: "https://nimeblogs.github.io/",
 	base: "/",
 	trailingSlash: "always",
 	integrations: [
@@ -101,6 +102,9 @@ export default defineConfig({
 		}),
         svelte(),
 		sitemap(),
+		fuwariLinkCard({
+	      internalLink: { enabled: true },
+	    }),
 	],
 	markdown: {
 		remarkPlugins: [

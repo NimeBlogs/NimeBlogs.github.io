@@ -4,6 +4,7 @@ enum I18nKey {
 	archive = "archive",
 	search = "search",
 	list = "list",
+	unfind = "unfind",
 
 	tags = "tags",
 	categories = "categories",
