@@ -5,7 +5,7 @@ import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-import Giscus from "../components/misc/Giscus.astro";
+import Comment from "@components/comment/index.astro";
 
 const messagePost = await getEntry("spec", "message");
 
@@ -22,14 +22,7 @@ const { Content } = await render(messagePost);
                 <Content />
             </Markdown>
             
-            <Giscus
-               repo="NimeBlogs/NimeBlogs-comments"
-               repoId="R_kgDOP8AHNw"
-               category="Announcements"
-               categoryId="DIC_kwDOP8AHN84CwOpI"
-               lang="zh-CN"
-            />
-            <br>
+            <Comment post={i18n(I18nKey.message)}></Comment>
         </div>
     </div>
 </MainGridLayout>

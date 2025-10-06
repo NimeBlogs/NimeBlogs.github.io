@@ -7,6 +7,7 @@ import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import TOC from "../components/widget/TOC.astro";
+import ReadingProgress from "../components/ReadingProgress.svelte";
 import { siteConfig } from "../config";
 import {
 	BANNER_HEIGHT,
@@ -46,6 +47,11 @@ const mainPanelTop = siteConfig.banner.enable
 ---
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
+
+<!-- Reading Progress Bar -->
+<slot name="progress">
+  <ReadingProgress client:only="svelte" />
+</slot>
 
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>

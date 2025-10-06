@@ -1,5 +1,5 @@
 export const PAGE_SIZE = 8;
-export const UNCATEGORIZED = 'uncategorized';
+export const UNCATEGORIZED = "uncategorized";
 
 export const LIGHT_MODE = "light",
 	DARK_MODE = "dark",

@@ -46,5 +46,5 @@ export const zh_CN: Translation = {
 	[Key.addFeaturedTag]: "添加'Featured'标签到文章即可在此显示",
 	[Key.relatedPosts]: "相关文章",
 	[Key.horoscope]: "今日运势",
-	[Key.series]: '系列',
+	[Key.series]: "系列",
 };

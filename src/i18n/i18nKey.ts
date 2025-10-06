@@ -43,7 +43,7 @@ enum I18nKey {
 	next = "next",
 	addFeaturedTag = "addFeaturedTag",
 	horoscope = "horoscope",
-	series = 'series',
+	series = "series",
 }
 
 export default I18nKey;

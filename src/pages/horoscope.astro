@@ -1009,12 +1009,6 @@ const luckyColors = [
 	"阳光黄",
 	"神秘紫",
 	"浪漫粉",
-	"优雅灰",
-	"沉稳黑",
-	"纯净白",
-	"温暖橙",
-	"清新青",
-	"魅力金",
 ];
 const luckyColor = luckyColors[dayOfYear % luckyColors.length];
 
@@ -1027,12 +1021,6 @@ function getColorValue(colorName) {
 		阳光黄: "#faad14",
 		神秘紫: "#722ed1",
 		浪漫粉: "#eb2f96",
-		优雅灰: "#8c8c8c",
-		沉稳黑: "#141414",
-		纯净白: "#ffffff",
-		温暖橙: "#fa8c16",
-		清新青: "#13c2c2",
-		魅力金: "#b7a450",
 	};
 	return colorMap[colorName] || "#8c8c8c";
 }

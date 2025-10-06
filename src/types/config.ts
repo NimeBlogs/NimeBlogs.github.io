@@ -64,6 +64,17 @@ export type NavBarConfig = {
 	links: (NavBarLink | LinkPreset)[];
 };
 
+export type CommentConfig = {
+    twikoo?: TwikooConfig
+}
+  
+type TwikooConfig = {
+    envId: string
+    region?: string
+    lang?: string
+}
+
+
 export type ProfileConfig = {
 	avatar?: string;
 	name: string;
