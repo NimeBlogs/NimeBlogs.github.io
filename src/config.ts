@@ -88,6 +88,6 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 
 export const commentConfig: CommentConfig = {
 	twikoo: {
-		envId: 'https://kerwen.netlify.app',
+		envId: 'https://kerwen.netlify.app/.netlify/functions/twikoo',
 	},
 }
