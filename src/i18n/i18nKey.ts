@@ -45,6 +45,7 @@ enum I18nKey {
 	addFeaturedTag = "addFeaturedTag",
 	horoscope = "horoscope",
 	series = "series",
+	activity = "activity",
 }
 
 export default I18nKey;

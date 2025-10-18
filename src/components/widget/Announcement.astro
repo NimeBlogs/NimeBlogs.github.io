@@ -1,0 +1,114 @@
+---
+import { Icon } from "astro-icon/components";
+import { announcementConfig } from "../../config";
+
+const config = announcementConfig;
+
+// 根据公告类型选择对应的图标
+const getIconByType = (type?: string) => {
+	switch (type) {
+		case "success":
+			return "fa6-solid:circle-check";
+		case "warning":
+			return "fa6-solid:triangle-exclamation";
+		case "error":
+			return "fa6-solid:circle-xmark";
+		default:
+			return "fa6-solid:circle-info";
+	}
+};
+
+// 根据公告类型选择对应的颜色和背景色
+const getStylesByType = (type?: string) => {
+	switch (type) {
+		case "success":
+			return {
+				textColor: "text-green-600",
+				bgColor: "bg-green-50 dark:bg-green-900/20",
+				borderColor: "border-green-200 dark:border-green-800",
+				hoverBgColor: "hover:bg-green-100 dark:hover:bg-green-800/30",
+			};
+		case "warning":
+			return {
+				textColor: "text-amber-600",
+				bgColor: "bg-amber-50 dark:bg-amber-900/20",
+				borderColor: "border-amber-200 dark:border-amber-800",
+				hoverBgColor: "hover:bg-amber-100 dark:hover:bg-amber-800/30",
+			};
+		case "error":
+			return {
+				textColor: "text-red-600",
+				bgColor: "bg-red-50 dark:bg-red-900/20",
+				borderColor: "border-red-200 dark:border-red-800",
+				hoverBgColor: "hover:bg-red-100 dark:hover:bg-red-800/30",
+			};
+		default:
+			return {
+				textColor: "text-blue-600",
+				bgColor: "bg-blue-50 dark:bg-blue-900/20",
+				borderColor: "border-blue-200 dark:border-blue-800",
+				hoverBgColor: "hover:bg-blue-100 dark:hover:bg-blue-800/30",
+			};
+	}
+};
+---
+
+{config.enable && config.announcements.length > 0 && (
+  <div class="card-base p-4 onload-animation" style="animation-delay: 250ms">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          <Icon name="fa6-solid:bell" class="text-primary dark:text-primary" />
+          公告
+        </h3>
+      <div class="bg-primary/10 dark:bg-primary/20 text-primary dark:text-gray-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
+        {config.announcements.length} 条
+      </div>
+    </div>
+    
+    <div class="space-y-3">
+      {config.announcements.map((announcement, index) => {
+        const icon = getIconByType(announcement.type);
+        const styles = getStylesByType(announcement.type);
+        
+        return (
+          <div 
+            key={index} 
+            class={`announcement-item p-3.5 rounded-xl border ${styles.bgColor} ${styles.borderColor} transition-all duration-300 transform hover:translate-x-1 ${styles.hoverBgColor} shadow-sm hover:shadow-md`}
+            style={{ animationDelay: `${250 + index * 100}ms` }}
+          >
+            <div class="flex items-start gap-3">
+              <div class={`p-2 rounded-full ${styles.bgColor.replace('bg-', 'bg-opacity-30 bg-')}`}>
+                <Icon name={icon} class={`text-xl shrink-0 ${styles.textColor}`} />
+              </div>
+              <div class="flex-1">
+                {announcement.title && (
+                  <h4 class="font-bold text-neutral-900 dark:text-neutral-100 mb-1.5 text-sm">
+                    {announcement.title}
+                  </h4>
+                )}
+                <div class="prose prose-sm dark:prose-invert max-w-none text-neutral-700 dark:text-neutral-300">
+                  {announcement.content}
+                </div>
+              </div>
+              {announcement.dismissible && (
+                <button 
+                  class="btn-plain rounded-full w-8 h-8 shrink-0 opacity-50 hover:opacity-100 transition-opacity"
+                  onclick={`this.closest('.announcement-item:nth-child(${index + 1})').classList.add('hidden')`}
+                  aria-label="关闭公告"
+                >
+                  <Icon name="fa6-solid:xmark" class="text-sm text-neutral-600 dark:text-neutral-400" />
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+    
+    <style>
+      .announcement-item {
+        will-change: transform, box-shadow;
+      }
+    </style>
+  </div>
+)}

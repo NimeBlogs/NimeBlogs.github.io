@@ -52,6 +52,8 @@ export enum LinkPreset {
 	Message = 4,
 	List = 5,
 	About = 6,
+	Activity = 7,
+	Horoscope = 8,
 }
 
 export type NavBarLink = {
@@ -116,3 +118,33 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type AnnouncementItem = {
+	content: string;
+	type?: 'info' | 'success' | 'warning' | 'error';
+	title?: string;
+	dismissible?: boolean;
+};
+
+export type AnnouncementConfig = {
+	enable: boolean;
+	announcements: AnnouncementItem[];
+}
+
+export type AuthorActivityItem = {
+	id: string;
+	title: string;
+	description?: string;
+	type?: 'post' | 'update' | 'event' | 'milestone';
+	date: Date;
+	link?: string;
+	external?: boolean;
+	icon?: string;
+	image?: string;
+};
+
+export type AuthorActivityConfig = {
+	enable: boolean;
+	activities: AuthorActivityItem[];
+	showLimit?: number;
+}

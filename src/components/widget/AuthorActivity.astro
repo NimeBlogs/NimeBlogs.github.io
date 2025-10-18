@@ -1,0 +1,146 @@
+---
+import { Icon } from "astro-icon/components";
+import { authorActivityConfig } from "../../config";
+import { url } from "../../utils/url-utils";
+import WidgetLayout from "./WidgetLayout.astro";
+
+interface Props {
+  class?: string;
+}
+
+const className = Astro.props.class;
+const config = authorActivityConfig;
+
+// 格式化日期
+const formatDate = (date: Date): string => {
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - date.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+  
+  if (diffDays === 1) {
+    return "昨天";
+  } else if (diffDays < 7) {
+    return `${diffDays} 天前`;
+  } else if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return `${weeks} 周前`;
+  } else if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30);
+    return `${months} 个月前`;
+  } else {
+    const years = Math.floor(diffDays / 365);
+    return `${years} 年前`;
+  }
+};
+
+// 根据活动类型获取图标
+const getIconByType = (type?: string): string => {
+  switch (type) {
+    case 'post':
+      return 'fa6-solid:file-lines';
+    case 'update':
+      return 'fa6-solid:arrows-rotate';
+    case 'event':
+      return 'fa6-solid:calendar';
+    case 'milestone':
+      return 'fa6-solid:trophy';
+    default:
+      return 'fa6-solid:circle-info';
+  }
+};
+
+// 根据活动类型获取颜色
+const getColorByType = (type?: string): string => {
+  switch (type) {
+    case 'post':
+      return 'text-blue-500';
+    case 'update':
+      return 'text-green-500';
+    case 'event':
+      return 'text-purple-500';
+    case 'milestone':
+      return 'text-amber-500';
+    default:
+      return 'text-gray-500';
+  }
+};
+
+// 获取要显示的活动列表（按日期排序并限制数量）
+const getActivitiesToShow = () => {
+  const activities = [...config.activities].sort((a, b) => 
+    b.date.getTime() - a.date.getTime()
+  );
+  
+  if (config.showLimit && config.showLimit > 0) {
+    return activities.slice(0, config.showLimit);
+  }
+  
+  return activities;
+};
+
+const activities = getActivitiesToShow();
+---
+
+{config.enable && activities.length > 0 && (
+  <WidgetLayout id="author-activity" name="作者动态" class={className}>
+    <div class="author-activity-container space-y-4 pt-2">
+      {activities.map((activity, index) => {
+        const icon = activity.icon || getIconByType(activity.type);
+        const color = getColorByType(activity.type);
+        const isLast = index === activities.length - 1;
+        
+        return (
+          <div key={activity.id} class="activity-item relative pl-10 pb-4">
+            {/* 时间线 */}
+            <div class="absolute left-3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700" style={{ display: isLast ? 'none' : 'block' }}></div>
+            
+            {/* 图标 */}
+            <div class={`absolute left-0 top-0 w-6 h-6 rounded-full flex items-center justify-center ${color} bg-white dark:bg-gray-800 shadow-sm border-2 border-white dark:border-gray-800`}>
+              <Icon name={icon} class="text-xs" />
+            </div>
+            
+            {/* 内容 */}
+            <div class="activity-content">
+              {activity.link ? (
+                <a href={activity.external ? activity.link : url(activity.link)} target={activity.external ? '_blank' : '_self'} rel={activity.external ? 'noopener noreferrer' : ''} class="block hover:text-primary transition-colors">
+                  <div class="flex items-baseline gap-2 mb-1">
+                    <span class="font-medium text-neutral-900 dark:text-neutral-100">{activity.title}</span>
+                    {activity.external && (
+                      <Icon name="fa6-solid:arrow-up-right-from-square" class="text-xs text-neutral-500" />
+                    )}
+                  </div>
+                  {activity.description && (
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-1">{activity.description}</p>
+                  )}
+                  <span class="text-xs text-neutral-500 dark:text-neutral-500">{formatDate(activity.date)}</span>
+                </a>
+              ) : (
+                <div>
+                  <div class="font-medium text-neutral-900 dark:text-neutral-100 mb-1">{activity.title}</div>
+                  {activity.description && (
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-1">{activity.description}</p>
+                  )}
+                  <span class="text-xs text-neutral-500 dark:text-neutral-500">{formatDate(activity.date)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </WidgetLayout>
+)}
+
+<style>
+  .author-activity-container {
+    overflow: hidden;
+  }
+  
+  .activity-item:hover .activity-content {
+    transform: translateX(2px);
+  }
+  
+  .activity-content {
+    transition: transform 0.2s ease;
+  }
+</style>

@@ -5,6 +5,39 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* 丝滑阻尼滚动效果 */
+html {
+  /* 设置全局滚动行为 */
+  scroll-behavior: smooth;
+  /* 启用硬件加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* OverlayScrollbars 阻尼滚动配置 */
+[data-overlayscrollbars-initialize] {
+  --osd-damping: 0.15;
+  --osd-scrollbar-auto-hide: scroll;
+  --osd-scrollbar-auto-hide-delay: 800;
+  --osd-scrollbar-hover-padding: 1;
+  --osd-size-auto-hide: 6;
+  --osd-size-hover: 8;
+  --osd-size-normal: 6;
+}
+
+/* 增强的滚动体验 */
+body {
+  /* 防止内容布局偏移 */
+  overflow-anchor: none;
+  /* 优化触摸设备上的滚动体验 */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 平滑滚动到锚点 */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
 /* 悬停缩放效果增强 */
 .scale-hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

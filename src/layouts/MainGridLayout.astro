@@ -6,7 +6,6 @@ import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
-import ReadingProgress from "../components/ReadingProgress.svelte";
 import TOC from "../components/widget/TOC.astro";
 import { siteConfig } from "../config";
 import {
@@ -38,8 +37,11 @@ const {
 	currentPostTitle,
 } = Astro.props;
 const hasBannerCredit =
-	siteConfig.banner.enable && siteConfig.banner.credit.enable;
-const hasBannerLink = !!siteConfig.banner.credit.url;
+	siteConfig.banner.enable &&
+	siteConfig.banner.credit &&
+	siteConfig.banner.credit.enable;
+const hasBannerLink =
+	siteConfig.banner.credit && !!siteConfig.banner.credit.url;
 
 const mainPanelTop = siteConfig.banner.enable
 	? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)`
@@ -48,10 +50,7 @@ const mainPanelTop = siteConfig.banner.enable
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
-<!-- Reading Progress Bar -->
-<slot name="progress">
-  <ReadingProgress client:only="svelte" />
-</slot>
+<!-- 阅读进度功能已集成到回到顶部按钮中 -->
 
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>
@@ -76,18 +75,15 @@ const mainPanelTop = siteConfig.banner.enable
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto]
     mx-auto gap-4 px-0 md:px-4"
         >
-            <!-- Banner image credit -->
-            {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
+            <!-- Banner image credit - 暂时完全注释掉 -->
+            {/* {hasBannerCredit && <a href={siteConfig.banner.credit?.url || ''} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
                                    "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
             >
-                <Icon class="text-white/75 text-[1.25rem] mr-1" name="material-symbols:copyright-outline-rounded" ></Icon>
-                <div class="text-white/75 text-xs">{siteConfig.banner.credit.text}</div>
-                <Icon class:list={["transition absolute text-[oklch(0.75_0.14_var(--hue))] right-4 text-[0.75rem] opacity-0",
-                    {"group-hover:opacity-100": hasBannerLink}]}
-                      name="fa6-solid:arrow-up-right-from-square">
-                </Icon>
-            </a>}
+                <div class="text-white/75 text-[1.25rem] mr-1">©</div>
+                <div class="text-white/75 text-xs">{siteConfig.banner.credit?.text || ''}</div>
+                {hasBannerLink && <div class="transition absolute text-[oklch(0.75_0.14_var(--hue))] right-4 text-[0.75rem] opacity-0 group-hover:opacity-100">→</div>}
+            </a>} */}
 
 
             <SideBar class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[17.5rem] onload-animation" headings={headings}  currentPostTitle={currentPostTitle} series={ series }></SideBar>

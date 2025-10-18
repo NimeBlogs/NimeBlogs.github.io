@@ -1,0 +1,398 @@
+---
+import { Icon } from "astro-icon/components";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
+import { authorActivityConfig } from "../config";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { url } from "../utils/url-utils";
+
+// 排序活动列表（按日期倒序）
+const sortedActivities = [...authorActivityConfig.activities].sort(
+	(a, b) => b.date.getTime() - a.date.getTime(),
+);
+
+// 根据活动类型获取图标
+const getIconByType = (type?: string, icon?: string): string => {
+	if (icon) return icon;
+
+	switch (type) {
+		case "post":
+			return "fa6-solid:file-lines";
+		case "update":
+			return "fa6-solid:arrows-rotate";
+		case "event":
+			return "fa6-solid:calendar";
+		case "milestone":
+			return "fa6-solid:trophy";
+		default:
+			return "fa6-solid:circle-info";
+	}
+};
+
+// 根据活动类型获取颜色
+const getColorByType = (type?: string): string => {
+	switch (type) {
+		case "post":
+			return "text-blue-500";
+		case "update":
+			return "text-green-500";
+		case "event":
+			return "text-purple-500";
+		case "milestone":
+			return "text-amber-500";
+		default:
+			return "text-gray-500";
+	}
+};
+
+// 格式化日期
+const formatDate = (date: Date): string => {
+	const now = new Date();
+	const diffTime = Math.abs(now.getTime() - date.getTime());
+	const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+	if (diffDays === 0) {
+		// 今天，显示具体时间
+		return new Intl.DateTimeFormat("zh-CN", {
+			hour: "2-digit",
+			minute: "2-digit",
+		}).format(date);
+	}
+	if (diffDays === 1) {
+		return "昨天";
+	}
+	if (diffDays < 7) {
+		return `${diffDays} 天前`;
+	}
+	if (diffDays < 30) {
+		const weeks = Math.floor(diffDays / 7);
+		return `${weeks} 周前`;
+	}
+	if (diffDays < 365) {
+		const months = Math.floor(diffDays / 30);
+		return `${months} 个月前`;
+	}
+	const years = Math.floor(diffDays / 365);
+	return `${years} 年前`;
+};
+
+// 获取相对日期格式化
+const getRelativeDate = (date: Date): string => {
+	return new Intl.DateTimeFormat("zh-CN", {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "2-digit",
+		minute: "2-digit",
+	}).format(date);
+};
+
+// 获取随机背景颜色
+const getRandomBgColor = (index: number): string => {
+	const colors = [
+		"bg-blue-50 dark:bg-blue-900/20",
+		"bg-green-50 dark:bg-green-900/20",
+		"bg-purple-50 dark:bg-purple-900/20",
+		"bg-amber-50 dark:bg-amber-900/20",
+		"bg-pink-50 dark:bg-pink-900/20",
+		"bg-cyan-50 dark:bg-cyan-900/20",
+		"bg-indigo-50 dark:bg-indigo-900/20",
+		"bg-emerald-50 dark:bg-emerald-900/20",
+	];
+
+	return colors[index % colors.length];
+};
+---
+
+<MainGridLayout 
+  title="朋友圈动态" 
+  description="记录博主的最新动态、文章发布和活动参与情况，更美观、更高级的体验" 
+  class="bg-gradient-to-b from-neutral-50 to-neutral-100 dark:from-gray-900 dark:to-gray-800 min-h-screen"
+>
+  <div class="flex flex-col w-full gap-8">
+    {/* 页面标题 */}
+    <div class="text-center mb-10 animate-fadeIn">
+      <h1 class="text-4xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-4 relative inline-block tracking-tight">
+        朋友圈动态
+        <span class="absolute -bottom-2 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"></span>
+      </h1>
+      <p class="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto mt-4 text-lg leading-relaxed">
+        记录博主的最新动态、文章发布和活动参与情况，让你随时了解博主的最新进展。
+      </p>
+    </div>
+
+    {/* 创建动态提示卡片 */}
+    <div class="card-base p-6 rounded-[var(--radius-large)] bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/15 border border-primary/10 dark:border-primary/20 shadow-sm hover:shadow-md transition-all duration-300 animate-fadeIn" style="animation-delay: 0.1s">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center transform transition-transform duration-300 hover:scale-110">
+          <Icon name="fa6-solid:plus" class="text-primary w-6 h-6" />
+        </div>
+        <div class="flex-1">
+          <p class="text-neutral-700 dark:text-neutral-300 font-medium">分享你的新鲜事</p>
+          <p class="text-neutral-500 dark:text-neutral-400 text-sm mt-1">记录生活中的美好瞬间</p>
+        </div>
+        <button class="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/90 active:bg-primary/80 transition-all duration-300 shadow-sm hover:shadow-md hover:translate-y-[-2px] active:translate-y-0">
+          创建
+        </button>
+      </div>
+    </div>
+
+    {/* 作者动态朋友圈 */}
+    {sortedActivities.length > 0 ? (
+      <div class="space-y-6">
+        {sortedActivities.map((activity, index) => {
+          const icon = getIconByType(activity.type, activity.icon);
+          const color = getColorByType(activity.type);
+          const dateStr = formatDate(activity.date);
+          const fullDate = getRelativeDate(activity.date);
+          const bgColor = getRandomBgColor(activity.id);
+          
+          // 简化类型名称显示
+          let typeDisplay = 'Activity';
+          if (activity.type) {
+            typeDisplay = activity.type.charAt(0).toUpperCase() + activity.type.slice(1);
+          }
+          
+          // 动画延迟样式
+          const animationDelay = index * 0.1 + 's';
+          
+          return (
+              <div 
+                key={activity.id} 
+                class="animate-fadeIn"
+                style={{
+                  animationDelay: animationDelay
+                }}
+              >
+                {/* 动态卡片 */}
+                <div class="card-base p-6 rounded-[var(--radius-large)] bg-white dark:bg-gray-800/80 backdrop-blur-sm shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-neutral-100 dark:border-neutral-700 overflow-hidden relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
+                  {/* 装饰元素 */}
+                  <div class="absolute top-0 right-0 w-32 h-32 -mt-10 -mr-10 rounded-full bg-gradient-to-br from-primary/5 to-transparent opacity-70 transition-transform duration-700 hover:scale-150"></div>
+                  
+                  {/* 头部：头像、姓名、时间 */}
+                  <div class="flex items-center justify-between mb-4 relative z-10">
+                    <div class="flex items-center gap-3">
+                      <div class={bgColor + " w-12 h-12 rounded-full flex items-center justify-center ring-4 ring-white/50 dark:ring-gray-800/50 shadow-sm transition-transform duration-300 hover:scale-110"}>
+                        <Icon name={icon} class={color + " w-6 h-6"} />
+                      </div>
+                      <div>
+                        <h3 class="font-bold text-neutral-900 dark:text-white">作者动态</h3>
+                        <div class="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+                          <span>{fullDate}</span>
+                          <span>•</span>
+                          <span class={color}>{typeDisplay}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-gray-700 transform hover:rotate-90 transition-transform duration-300">
+                      <Icon name="material-symbols:more-vert" class="w-5 h-5" />
+                    </button>
+                  </div>
+                  
+                  {/* 内容 */}
+                  <div class="mb-4 relative z-10">
+                    {activity.link ? (
+                      <a 
+                        href={activity.external ? activity.link : url(activity.link || '')}
+                        target={activity.external ? '_blank' : '_self'}
+                        rel={activity.external ? 'noopener noreferrer' : ''}
+                        class="block hover:text-primary transition-all duration-300 group"
+                      >
+                        <h4 class="font-bold text-xl text-neutral-900 dark:text-white mb-2 hover:text-primary transition-colors group-hover:underline decoration-primary/50 underline-offset-4">
+                          {activity.title}
+                        </h4>
+                        {activity.description && (
+                          <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4 tracking-wide">
+                            {activity.description}
+                          </p>
+                        )}
+                        {activity.image && (
+                          <div class="rounded-xl overflow-hidden my-4 shadow-md transition-all duration-500 hover:shadow-xl hover:scale-[1.01]">
+                            <ImageWrapper 
+                              src={activity.image}
+                              alt={activity.title}
+                              class="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
+                            />
+                          </div>
+                        )}
+                      </a>
+                    ) : (
+                      <div>
+                        <h4 class="font-bold text-xl text-neutral-900 dark:text-white mb-2">
+                          {activity.title}
+                        </h4>
+                        {activity.description && (
+                          <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4 tracking-wide">
+                            {activity.description}
+                          </p>
+                        )}
+                        {activity.image && (
+                          <div class="rounded-xl overflow-hidden my-4 shadow-md transition-all duration-500 hover:shadow-xl hover:scale-[1.01]">
+                            <ImageWrapper 
+                              src={activity.image}
+                              alt={activity.title}
+                              class="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* 底部交互栏 */}
+                  <div class="pt-4 border-t border-neutral-100 dark:border-neutral-700 flex items-center justify-between relative z-10">
+                    <div class="flex items-center gap-2">
+                      <button class="flex items-center gap-1.5 text-neutral-500 hover:text-red-500 transition-all duration-300 px-3 py-1.5 rounded-full hover:bg-red-50 dark:hover:bg-red-900/10 transform hover:-translate-y-0.5 active:translate-y-0">
+                        <Icon name="material-symbols:favorite-outline" class="w-5 h-5 transition-transform duration-300 hover:scale-110 hover:animate-pulse" />
+                        <span>点赞</span>
+                      </button>
+                      <button class="flex items-center gap-1.5 text-neutral-500 hover:text-blue-500 transition-all duration-300 px-3 py-1.5 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/10 transform hover:-translate-y-0.5 active:translate-y-0">
+                        <Icon name="material-symbols:comment-outline" class="w-5 h-5 transition-transform duration-300 hover:scale-110" />
+                        <span>评论</span>
+                      </button>
+                    </div>
+                    <button class="flex items-center gap-1.5 text-neutral-500 hover:text-green-500 transition-all duration-300 px-3 py-1.5 rounded-full hover:bg-green-50 dark:hover:bg-green-900/10 transform hover:-translate-y-0.5 active:translate-y-0">
+                      <Icon name="material-symbols:share-outline" class="w-5 h-5 transition-transform duration-300 hover:scale-110 hover:rotate-12" />
+                      <span>分享</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    ) : (
+      <div class="card-base p-12 rounded-[var(--radius-large)] text-center bg-white dark:bg-gray-800/80 shadow-sm border border-neutral-100 dark:border-neutral-700 animate-fadeIn">
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-neutral-100 dark:bg-neutral-800 mb-6 transition-transform duration-500 hover:scale-110">
+          <Icon name="fa6-solid:history" class="text-neutral-400 w-12 h-12" />
+        </div>
+        <h3 class="text-2xl font-bold text-neutral-900 dark:text-white mb-3">暂无动态记录</h3>
+        <p class="text-neutral-500 dark:text-neutral-400 max-w-md mx-auto text-lg leading-relaxed">
+          博主还没有发布任何动态，敬请期待精彩内容！
+        </p>
+      </div>
+    )}
+  </div>
+</MainGridLayout>
+
+<style>
+  /* 动画效果 */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes ping {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes hoverScale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.03);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  .animate-ping {
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  
+  .animate-hover-scale {
+    animation: hoverScale 3s ease-in-out infinite;
+  }
+  
+  /* 交互效果增强 */
+  button:active {
+    transform: scale(0.97);
+  }
+  
+  /* 响应式调整 */
+  @media (max-width: 768px) {
+    .card-base {
+      padding: 1.5rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem !important;
+    }
+    
+    h4 {
+      font-size: 1.25rem !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .card-base {
+      padding: 1.25rem;
+    }
+  }
+  
+  /* 平滑滚动 */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* 卡片悬停效果增强 */
+  .card-base {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* 渐变背景增强 */
+  .bg-gradient-to-b {
+    background-size: 100% 100%;
+  }
+  
+  /* 卡片阴影增强 */
+  .card-base:hover {
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08), 0 10px 15px -5px rgba(0, 0, 0, 0.02);
+  }
+  
+  /* 暗黑模式卡片阴影 */
+  .dark .card-base:hover {
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2), 0 10px 15px -5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 图片容器过渡增强 */
+  .rounded-xl.overflow-hidden {
+    position: relative;
+    isolation: isolate;
+  }
+  
+  /* 按钮微交互 */
+  button:has(.material-symbols:favorite-outline):active {
+    color: red !important;
+  }
+  
+  button:has(.material-symbols:comment-outline):active {
+    color: blue !important;
+  }
+  
+  button:has(.material-symbols:share-outline):active {
+    color: green !important;
+  }
+</style>

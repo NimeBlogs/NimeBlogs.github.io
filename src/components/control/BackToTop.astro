@@ -4,7 +4,34 @@ import { Icon } from "astro-icon/components";
 
 <!-- There can't be a filter on parent element, or it will break `fixed` -->
 <div class="back-to-top-wrapper hidden lg:block">
-    <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
+    <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition z-50" onclick="backToTop()">
+        <!-- 阅读进度条 -->
+        <div class="progress-ring" aria-hidden="true">
+            <svg class="progress-ring-circle" width="60" height="60" viewBox="0 0 60 60">
+                <circle
+                    cx="30"
+                    cy="30"
+                    r="28"
+                    fill="none"
+                    stroke="rgba(128, 128, 128, 0.2)"
+                    stroke-width="2"
+                />
+                <circle
+                    id="progress-circle"
+                    cx="30"
+                    cy="30"
+                    r="28"
+                    fill="none"
+                    stroke="var(--primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-dasharray="175.93"
+                    stroke-dashoffset="175.93"
+                    transform="rotate(-90 30 30)"
+                />
+            </svg>
+        </div>
+        <!-- 回到顶部按钮 -->
         <button aria-label="Back to Top" class="btn-card h-[3.75rem] w-[3.75rem]">
             <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto"></Icon>
         </button>
@@ -13,20 +40,22 @@ import { Icon } from "astro-icon/components";
 
 <style lang="stylus">
 .back-to-top-wrapper
+    pointer-events: none
+    position: fixed
+    bottom: 2rem
+    right: 2rem
+    z-index: 50
     width: 3.75rem
     height: 3.75rem
-    position: absolute
-    right: 0
-    top: 0
-    pointer-events: none
 
 .back-to-top-btn
     color: var(--primary)
     font-size: 2.25rem
     font-weight: bold
     border: none
-    position: fixed
-    bottom: 10rem
+    position: relative
+    bottom: 0
+    right: 0
     opacity: 1
     cursor: pointer
     transform: translateX(5rem)
@@ -40,10 +69,76 @@ import { Icon } from "astro-icon/components";
     &:active
       transform: translateX(5rem) scale(0.9)
 
+/* 进度环样式 */
+.progress-ring
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    pointer-events: none
+
+.progress-ring-circle
+    transition: stroke-dashoffset 0.35s
+    transform-origin: center
+
 </style>
 
 <script is:raw is:inline>
 function backToTop() {
     window.scroll({ top: 0, behavior: 'smooth' });
+}
+
+// 初始化阅读进度环
+function initProgressRing() {
+    const circle = document.getElementById('progress-circle');
+    if (!circle) return;
+    
+    // 计算圆周长
+    const radius = 28;
+    const circumference = 2 * Math.PI * radius;
+    
+    // 设置初始状态
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = circumference;
+    
+    // 更新进度
+    function updateProgress() {
+        // 获取文档总高度和可视区域高度
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        // 获取当前滚动位置
+        const progressHeight = window.scrollY;
+        // 计算进度百分比
+        const progress = totalHeight > 0 ? (progressHeight / totalHeight) * 100 : 0;
+        
+        // 更新进度环
+        const offset = circumference - (progress / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+    }
+    
+    // 添加滚动事件监听
+    window.addEventListener('scroll', updateProgress);
+    // 初始更新一次进度
+    updateProgress();
+    
+    // 返回清理函数
+    return () => window.removeEventListener('scroll', updateProgress);
+}
+
+// 页面加载完成后初始化
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        let cleanupProgress = initProgressRing();
+        
+        // 清理函数，当页面卸载时调用
+        window.addEventListener('beforeunload', () => {
+            if (cleanupProgress) {
+                cleanupProgress();
+            }
+        });
+    });
 }
 </script>

@@ -4,7 +4,7 @@ import { siteConfig } from "@/config";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-import { url } from "../utils/url-utils";
+import { Icon } from 'astro-icon/components';
 ---
 
 <MainGridLayout title={i18n(I18nKey.unfind)} description={i18n(I18nKey.unfind)}>
@@ -22,17 +22,14 @@ import { url } from "../utils/url-utils";
             : 'Sorry, the page you are looking for does not exist or has been removed.'}
         </p>
         <a 
-          href={url("/")} 
+          href="/" 
           class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary/20 animate-fade-in-up animation-delay-600"
         >
+          <Icon name="material-symbols:home-outline-rounded" class="mr-2 w-5 h-5" />
           {siteConfig.lang === 'zh_CN' ? '返回首页' : 'Go Back Home'}
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
         </a>
       </div>
     </div>
-  </Layout>
 
   <style>
     .bg-clip-text {

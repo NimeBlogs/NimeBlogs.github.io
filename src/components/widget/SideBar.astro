@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
+import Announcement from "./Announcement.astro";
 import Categories from "./Categories.astro";
 import Profile from "./Profile.astro";
 import Series from "./Series.astro";
@@ -9,6 +10,7 @@ interface Props {
 	class?: string;
 	headings?: MarkdownHeading[];
 	series?: string;
+	currentPostTitle?: string;
 }
 
 const className = Astro.props.class;
@@ -16,14 +18,15 @@ const series = Astro.props.series;
 const currentPostTitle = Astro.props.currentPostTitle;
 ---
 <div id="sidebar" class:list={[className, "w-full"]}>
-    <div class="flex flex-col w-full gap-4 mb-4">
-        <Profile></Profile>
-    </div>
-    <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
-        <div id="series" class="flex flex-col w-full gap-4">
-            { series && <Series series={ series } currentPostTitle={currentPostTitle} class=" mt-4"></Series> }
-        </div>
-        <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
-        <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
-    </div>
+	<div class="flex flex-col w-full gap-4 mb-4">
+		<Profile></Profile>
+	</div>
+	<div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
+		<div id="series" class="flex flex-col w-full gap-4">
+			{ series && <Series series={ series } currentPostTitle={currentPostTitle} class=" mt-4"></Series> }
+		</div>
+		<Announcement></Announcement>
+		<Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
+		<Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
+	</div>
 </div>

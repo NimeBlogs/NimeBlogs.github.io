@@ -48,4 +48,5 @@ export const zh_CN: Translation = {
 	[Key.relatedPosts]: "相关文章",
 	[Key.horoscope]: "今日运势",
 	[Key.series]: "系列",
+	[Key.activity]: "动态",
 };

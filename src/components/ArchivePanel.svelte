@@ -1,5 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
+import { writable } from "svelte/store";
 
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
@@ -13,6 +14,10 @@ const params = new URLSearchParams(window.location.search);
 tags = params.has("tag") ? params.getAll("tag") : [];
 categories = params.has("category") ? params.getAll("category") : [];
 const uncategorized = params.get("uncategorized");
+
+// 排序方向状态 - true 表示降序(最新在前)，false 表示升序(最旧在前)
+const sortDirection = writable(true); // 默认降序
+let sortIcon: SVGSVGElement | null = null;
 
 interface Post {
 	slug: string;
@@ -37,11 +42,18 @@ function formatDate(date: Date) {
 	return `${month}-${day}`;
 }
 
-function formatTag(tagList: string[]) {
-	return tagList.map((t) => `#${t}`).join(" ");
+// 切换排序方向
+function toggleSortDirection() {
+	sortDirection.update(value => !value);
+	updateGroups();
+	// 更新排序图标旋转状态
+	if (sortIcon) {
+		sortIcon.style.transform = sortDirection.get() ? 'rotate(180deg)' : 'rotate(0deg)';
+	}
 }
 
-onMount(async () => {
+// 更新文章分组和排序
+function updateGroups() {
 	let filteredPosts: Post[] = sortedPosts;
 
 	if (tags.length > 0) {
@@ -79,13 +91,57 @@ onMount(async () => {
 		posts: grouped[Number.parseInt(yearStr, 10)],
 	}));
 
-	groupedPostsArray.sort((a, b) => b.year - a.year);
+	// 根据排序方向进行排序
+	groupedPostsArray.sort((a, b) => {
+		return sortDirection.get() ? b.year - a.year : a.year - b.year;
+	});
+
+	// 对每年内的文章也按照排序方向排序
+	groupedPostsArray.forEach(group => {
+		group.posts.sort((a, b) => {
+			const dateA = new Date(a.data.published).getTime();
+			const dateB = new Date(b.data.published).getTime();
+			return sortDirection.get() ? dateB - dateA : dateA - dateB;
+		});
+	});
 
 	groups = groupedPostsArray;
+}
+
+function formatTag(tagList: string[]) {
+	return tagList.map((t) => `#${t}`).join(" ");
+}
+
+onMount(async () => {
+	// 初始化分组
+	updateGroups();
 });
 </script>
 
 <div class="card-base px-8 py-6">
+    <!-- 排序控制按钮 -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">{i18n(I18nKey.archive)}</h2>
+        <button
+            on:click={toggleSortDirection}
+            class="btn-plain flex items-center gap-2 hover:text-[var(--primary)] transition-colors"
+            aria-label={sortDirection.get() ? "切换为升序排列" : "切换为降序排列"}
+        >
+            <span>{sortDirection.get() ? "最新在前" : "最旧在前"}</span>
+            <svg
+                class="w-4 h-4 transition-transform duration-300"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                style="transform: rotate(180deg)"
+                bind:this={sortIcon}
+            >
+                <path
+                    d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"
+                />
+            </svg>
+        </button>
+    </div>
+
     {#each groups as group}
         <div>
             <div class="flex flex-row w-full items-center h-[3.75rem]">
