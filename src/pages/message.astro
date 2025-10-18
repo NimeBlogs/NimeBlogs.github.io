@@ -2,7 +2,7 @@
 
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
-import GiscusComment from "../components/Giscus.astro";
+import Comment from "@components/comment/index.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -21,17 +21,7 @@ const { Content } = await render(messagePost);
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
-            <GiscusComment
-              repo="NimeBlogs/NimeBlogs-comments"
-              repoId="R_kgDOP8AHNw"
-              category="General"
-              categoryId="DIC_kwDOP8AHN84CwOpJ"
-              mapping="pathname"
-              reactionsEnabled="1"
-              emitMetadata="0"
-              inputPosition="top"
-              lang="zh-CN"
-            />
+            <Comment post={"message"}></Comment>
         </div>
     </div>
 </MainGridLayout>
