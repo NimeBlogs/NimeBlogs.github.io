@@ -5,7 +5,7 @@ export const theme: ThemeUserConfig = {
   /** Title for your website. Will be used in metadata and as browser tab title. */
   title: '浮生偶记',
   /** Will be used in index page & copyright declaration */
-  author: '𝙆𝙚𝙧𝙬𝙚𝙣',
+  author: '.𝙆𝙚𝙧𝙬𝙚𝙣',
   /** Description metadata for your website. Can be used in page metadata. */
   description: 'Stay hungry, stay foolish',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
