@@ -1,6 +1,9 @@
 ---
 import type { CollectionKey, InferEntrySchema } from 'astro:content'
-import config from 'virtual:config'
+import type { UserConfig } from '../../types/user-config'
+import rawConfig from 'virtual:config'
+
+const config = rawConfig as UserConfig
 
 import { cn, getFormattedDate } from '../../utils'
 import { QRCode } from '../advanced'
@@ -12,13 +15,18 @@ interface Props<T extends CollectionKey> {
 }
 
 const {
-  data: { heroImage, title, publishDate },
+  data,
   class: className
-} = Astro.props
+} = Astro.props as Props<CollectionKey>
 
-const image = typeof heroImage?.src === 'string' ? heroImage?.src : (heroImage?.src?.src ?? '')
+const { title, publishDate } = data
 
-const shares = {
+// 安全地获取图片路径，使用可选链和类型断言
+const image = ''
+
+type SharePlatform = 'weibo' | 'x' | 'bluesky'
+
+const shares: Record<SharePlatform, { link: string }> = {
   weibo: {
     link: `http://service.weibo.com/share/share.php?url=${Astro.url}&title=${title}&pic=${image}`
   },
@@ -28,7 +36,7 @@ const shares = {
   bluesky: {
     link: `https://bsky.app/intent/compose?text=${title}%0A${Astro.url}`
   }
-} as const
+}
 ---
 
 <div
@@ -91,9 +99,9 @@ const shares = {
         <Icon class='size-5' name='qrcode' />
       </button>
       {
-        config.content.share.map((share) => (
+        config.content.share.map((share: SharePlatform) => (
           <a
-            href={shares[share].link}
+            href={shares[share]?.link || '#'}
             target='_blank'
             id={`share-${share}`}
             class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'

@@ -1,7 +1,15 @@
 ---
-import config from 'virtual:config'
+import type { UserConfig } from '../../types/user-config'
+import rawConfig from 'virtual:config'
 
-const { content, class: className, ...props } = Astro.props
+const config = rawConfig as UserConfig
+
+interface Props {
+  content?: string
+  class?: string
+}
+
+const { content, class: className, ...props } = Astro.props as Props
 ---
 
 <div id='qrcode-container' class={className} {...props}></div>

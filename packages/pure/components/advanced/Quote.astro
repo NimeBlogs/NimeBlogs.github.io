@@ -17,8 +17,10 @@ const { class: className } = Astro.props
 </quote-component>
 
 <script>
-  import config from 'virtual:config'
+  import type { UserConfig } from '../../types/user-config'
+  import rawConfig from 'virtual:config'
 
+  const config = rawConfig as UserConfig
   const { quote } = config.integ
 
   class Quote extends HTMLElement {

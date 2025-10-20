@@ -1,6 +1,9 @@
 ---
-import config from 'virtual:config';
+import type { UserConfig } from '../../types/user-config';
+import rawConfig from 'virtual:config';
 import { Icon } from '../user'
+
+const config = rawConfig as UserConfig;
 ---
 
 <header-component
@@ -21,7 +24,7 @@ import { Icon } from '../user'
     >
       <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
         {
-          config.header.menu.map((item) => (
+          config.header.menu.map((item: { title: string; link: string }) => (
             <a
               href={item.link}
               class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'

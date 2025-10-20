@@ -70,7 +70,7 @@ export function vitePluginUserConfig(
     /**
      * Module containing imports of user-specified custom CSS files.
      */
-    'virtual:user-css': opts.customCss.map((id) => `import ${resolveId(id)};`).join(''),
+    'virtual:user-css': opts.customCss.map((id: string) => `import ${resolveId(id)};`).join(''),
     'virtual:user-images': opts.logo
       ? 'src' in opts.logo
         ? `import src from ${resolveId(

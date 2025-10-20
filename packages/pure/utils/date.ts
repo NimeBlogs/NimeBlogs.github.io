@@ -1,4 +1,7 @@
-import config from 'virtual:config'
+import type { UserConfig } from '../types/user-config'
+import rawConfig from 'virtual:config'
+
+const config = rawConfig as UserConfig
 
 const dateFormat = new Intl.DateTimeFormat(config.locale.dateLocale, config.locale.dateOptions)
 

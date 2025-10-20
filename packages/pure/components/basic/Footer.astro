@@ -1,17 +1,19 @@
 ---
-import config from 'virtual:config';
+import type { UserConfig } from '../../types/user-config';
+import rawConfig from 'virtual:config';
 import { Icon } from '../user'
 
-const footerConf = config.footer
-let social = footerConf.social || {}
+const config = rawConfig as UserConfig;
+const footerConf = config.footer;
+let social = footerConf.social || {};
 
 // If the list does not contain rss, add it
 social.rss = {
   label: 'RSS',
   url: '/rss.xml'
-}
+};
 
-const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
+const footerLink1 = footerConf.links?.filter(({ pos }: { pos: number }) => pos === 1) || [];
 ---
 
 <footer class='mx-auto mb-5 mt-16 w-full'>
@@ -24,7 +26,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         {
           footerLink1.length > 0 && (
             <div>
-              {footerLink1.map(({ title, link, style }, index) => (
+              {footerLink1.map(({ title, link, style }: { title: string; link: string; style?: string }, index: number) => (
                 <span>
                   <a href={link} target='_blank' class={style}>
                     {title}
@@ -45,8 +47,8 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                 &
                 <span>
                   {footerConf.links
-                    .filter(({ pos }) => pos === 2)
-                    .map(({ title, link, style }) => (
+                    .filter(({ pos }: { pos: number }) => pos === 2)
+                    .map(({ title, link, style }: { title: string; link: string; style?: string }) => (
                       <span>
                         <a href={link} target='_blank' class={style}>
                           {title}
@@ -78,7 +80,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
       <div class='flex items-center gap-x-4'>
         {
           footerConf.social &&
-            Object.entries(footerConf.social).map(([platform, { label, url }]) => (
+            Object.entries(footerConf.social).map(([platform, { label, url }]: [string, { label: string; url: string }]) => (
               <a
                 class='inline-block text-muted-foreground transition-all hover:text-muted-foreground/75'
                 href={url}

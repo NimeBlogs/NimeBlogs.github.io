@@ -12,19 +12,19 @@ import rehypeExternalLinks from './plugins/rehype-external-links'
 import rehypeTable from './plugins/rehype-table'
 import { remarkAddZoomable, remarkReadingTime } from './plugins/remark-plugins'
 import { vitePluginUserConfig } from './plugins/virtual-user-config'
-import { UserConfigSchema, type UserInputConfig } from './types/user-config'
+import { UserConfigSchema, type UserConfig, type UserInputConfig } from './types/user-config'
 import { parseWithFriendlyErrors } from './utils/error-map'
 
 export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegration {
   let integrations: AstroIntegration[] = []
   let remarkPlugins: RemarkPlugins = []
   let rehypePlugins: RehypePlugins = []
+  let userConfig: UserConfig | undefined
   return {
     name: 'astro-pure',
     hooks: {
       'astro:config:setup': async ({ config, updateConfig }) => {
-        let userConfig = parseWithFriendlyErrors(
-          // @ts-ignore
+        let userConfig: UserConfig = parseWithFriendlyErrors(
           UserConfigSchema,
           opts,
           'Invalid config passed to astro-pure integration'
@@ -72,7 +72,6 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
 
         updateConfig({
           vite: {
-            // @ts-ignore
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
           markdown: {
@@ -90,7 +89,7 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
       },
 
       'astro:build:done': ({ dir }) => {
-        if (!opts.integ.pagefind) return
+        if (!userConfig?.integ.pagefind) return
         const targetDir = fileURLToPath(dir)
         const cwd = dirname(fileURLToPath(import.meta.url))
         const relativeDir = relative(cwd, targetDir)

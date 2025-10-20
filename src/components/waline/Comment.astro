@@ -21,8 +21,9 @@ const { class: className } = Astro.props
 <script>
   import { init as walineInit } from '@waline/client'
   import type { WalineEmojiPresets } from '@waline/client'
-  import config from 'virtual:config'
-
+  import rawConfig from 'virtual:config'
+  
+  const config = rawConfig
   const walineConfig = config.integ.waline
 
   class Comment extends HTMLElement {
@@ -39,7 +40,7 @@ const { class: className } = Astro.props
       ).__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
 
       const emoji = walineConfig.emoji?.map(
-        (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
+        (preset: string) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
       )
 
       walineInit({

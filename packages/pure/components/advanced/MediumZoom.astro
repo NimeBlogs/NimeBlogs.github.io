@@ -1,6 +1,9 @@
 ---
 // https://github.com/francoischalifour/medium-zoom
-import config from 'virtual:config'
+import type { UserConfig } from '../../types/user-config'
+import rawConfig from 'virtual:config'
+
+const config = rawConfig as UserConfig
 
 interface Props {
   selector?: string
